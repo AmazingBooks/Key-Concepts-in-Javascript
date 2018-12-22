@@ -12,6 +12,7 @@ In a PROMISE we are dealing with time sensitive code thus a PROMISE can have dif
   - **Settled, Resolved** -  after the event has happen;
   - **Fulfilled** - when the promise what settled, resolved successful;
   - **Rejected** - if there was an error;
+In more practical terms we can Produce and Consume Promises; so when we produce a Promise we create a new Promise and send the result using that Promise, than when we consume it, we can use callback functions for fulfillment or rejection of that promises.
 
 
 
