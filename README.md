@@ -15,6 +15,6 @@ In a PROMISE we are dealing with time sensitive code thus a PROMISE can have dif
 
 In more practical terms we can Produce and Consume Promises; so when we produce a Promise we create a new Promise and send the result using that Promise, than when we consume it, we can use callback functions for fulfillment or rejection of that promises.
 
-
+![Promise](https://raw.githubusercontent.com/AmazingBooks/Key-Concepts-in-Javascript/master/images/Promise.png)
 
 
