@@ -4,6 +4,14 @@ Information is structured and gathered from different resources, mentioned in th
 
 
 ## Promises 
+### What is a PROMISE? 
+A promise is an Object that keeps track whether a certain event has happened already or not and determines what happens after the event ends. A Promise implements the concept of a future value that we’re expecting.
+“It’s saying - hey get me some data from the server in the background and it promises that it will get that data”;
+In a PROMISE we are dealing with time sensitive code thus a PROMISE can have different states: 
+  - **Pending** - before the event has happening, the Promise is pending, 
+  - **Settled, Resolved** -  after the event has happen;
+  - **Fulfilled** - when the promise what settled, resolved successful;
+  - **Rejected** - if there was an error;
 
 
 
