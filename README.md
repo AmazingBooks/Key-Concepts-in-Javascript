@@ -3,6 +3,8 @@ A comprehensive and easy to understand guide for Javascript advanced concepts wi
 Information is structured and gathered from different resources, mentioned in the Reference part of the book. 
 
 
+## Promises 
+
 
 
 
