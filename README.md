@@ -101,6 +101,10 @@ Each promise goes through a short life cycle starting in the pending state, whic
 
 **How can we check a state of a Promise?** - An internal [[PromiseState]] property is set to "pending", "fulfilled", or "rejected" to reflect the promise’s state. This property isn’t exposed on promise objects, so you can’t determine which state the promise is in programmatically. But you can take a specific action when a promise changes state by using the then() method.  
 
+**then() Method** - The then() method is present on all promises and takes two arguments. 
+ 1. The first argument is a function to call when the promise is <ins>fulfilled</ins>.
+ 2. The second argument is a function to call when the promise is rejected.
+
 1. **<ins>Unsettled</ins>** - which is a pending Promise. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
