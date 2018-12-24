@@ -139,7 +139,51 @@ Just know that if you don’t attach a rejection handler to a promise, all failu
 
 The 3 states of a Promise are:
 
-1. **<ins>Unsettled</ins>** - which is a pending Promise. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
+1. **<ins>Unsettled</ins>** - which is a pending Promise. The promise in the previous example is in the pending state as soon as the readFile() function returns it. 
+
+**How do we create an Unsettled PROMISE?**
+New promises are created using the **Promise Constructor**. This constructor accepts a single argument: a function called the **Executor**, which contains the code to initialize the Promise. Two functions are passed as arguments to the **Executor** - resolve() and reject(). 
+    - resolve() function is called when the executor has finished successfully to signal that the promise is ready to be resolved,
+    - reject() function indicates that the executor has failed.
+
+```javascript
+ // Node.js example
+
+let fs = require("fs");
+
+function readFile(filename) {
+    return new Promise(function(resolve, reject) {
+
+        // trigger the asynchronous operation
+        fs.readFile(filename, { encoding: "utf8" }, function(err, contents) {
+
+            // check for errors
+            if (err) {
+                reject(err);
+                return;
+                }
+
+            // the read succeeded
+            resolve(contents);
+
+        });
+    });
+}
+
+let promise = readFile("example.txt");
+
+// listen for both fulfillment and rejection
+promise.then(function(contents) {
+    // fulfillment
+    console.log(contents);
+}, function(err) {
+    // rejection
+    console.error(err.message);
+});
+
+```
+
+Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
 
