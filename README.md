@@ -194,7 +194,14 @@ setTimeout(function() {
 
 console.log("Hi!");
 ```
-
+Promises work similarly. The promise executor executes immediately, before anything that appears after it in the source code. For instance:
+```javascript
+let promise = new Promise(function(resolve, reject) {
+    console.log("Promise");
+    resolve();
+});
+console.log("Hi!");
+```
 Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
