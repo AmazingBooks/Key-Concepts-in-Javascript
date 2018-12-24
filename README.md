@@ -99,6 +99,8 @@ In this code, readFile() doesn’t start reading the file immediately: that will
 **Anatomy of a PROMISE** - ***Promise Life Cycle***
 Each promise goes through a short life cycle starting in the pending state, which indicates that the asynchronous operation hasn’t completed yet. 
 
+**How can we check a state of a Promise** - An internal [[PromiseState]] property is set to "pending", "fulfilled", or "rejected" to reflect the promise’s state. This property isn’t exposed on promise objects, so you can’t determine which state the promise is in programmatically. But you can take a specific action when a promise changes state by using the then() method.  
+
 1. **<ins>Unsettled</ins>** - which is a pending Promise. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
