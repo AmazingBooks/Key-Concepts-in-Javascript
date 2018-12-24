@@ -170,17 +170,28 @@ function readFile(filename) {
     });
 }
 
-let promise = readFile("example.txt");
+  let promise = readFile("example.txt");
 
-// listen for both fulfillment and rejection
-promise.then(function(contents) {
-    // fulfillment
-    console.log(contents);
-}, function(err) {
-    // rejection
-    console.error(err.message);
-});
+  // listen for both fulfillment and rejection
+  promise.then(function(contents) {
+      // fulfillment
+      console.log(contents);
+  }, function(err) {
+      // rejection
+      console.error(err.message);
+  });
 
+```
+When either resolve() or reject() is called inside the executor, a job is added to the job queue to resolve the promise. This is called job scheduling, and if you’ve ever used the setTimeout() or setInterval() functions, you’re already familiar with it. In job scheduling, you add a new job to the job queue to say, “Don’t execute this right now, but execute it later.”
+
+For instance, the setTimeout() function lets you specify a delay before a job is added to the queue:
+```javascript
+// add this function to the job queue after 500 ms have passed
+setTimeout(function() {
+    console.log("Timeout");
+}, 500)
+
+console.log("Hi!");
 ```
 
 Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
