@@ -98,5 +98,7 @@ In this code, readFile() doesn’t start reading the file immediately: that will
 
 ***The Promise Life Cycle***
 Each promise goes through a short life cycle starting in the pending state, which indicates that the asynchronous operation hasn’t completed yet. A pending promise is considered <ins>unsettled</ins>. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
+
 **Fulfilled** - The promise’s asynchronous operation has completed successfully.
+
 **Rejected** - The promise’s asynchronous operation didn’t complete successfully due to either an error or some other cause.
