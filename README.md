@@ -28,3 +28,25 @@ For example:
  console.log("Clicked");
 };
 ```
+In this code, console.log("Clicked") will not be executed until button is clicked. When button is clicked, the function assigned to onclick is added to the back of the job queue and will be executed when all other jobs ahead of it are complete.
+Although events are useful for responding to user interactions and similar infrequent functionality, they aren’t very flexible for more complex needs.
+
+**The Callback Pattern**
+The callback pattern is more flexible than events because chaining multiple calls together is easier with callbacks. 
+Here’s an example:
+```javascript
+readFile("example.txt", function(err, contents) {
+    if (err) {
+        throw err;
+    }
+
+    writeFile("example.txt", function(err) {
+        if (err) {
+            throw err;
+        }
+
+        console.log("File was written!");
+    });
+});
+```
+
