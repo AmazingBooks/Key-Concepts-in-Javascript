@@ -104,9 +104,33 @@ Each promise goes through a short life cycle starting in the pending state, whic
 **then() Method** - The then() method is present on all promises and takes two arguments. 
  1. The first argument is a function to call when the promise is <ins>fulfilled</ins>.
  2. The second argument is a function to call when the promise is rejected.
+ 
+```javascript
+let promise = readFile("example.txt");
 
-> ***Note - Any object that implements the then() method as described in the preceding paragraph is called a thenable. All promises are thenables, but all thenables are not promises. ***
-The three states of a Promise are:
+promise.then(function(contents) {
+    // fulfillment
+    console.log(contents);
+}, function(err) {
+    // rejection
+    console.error(err.message);
+});
+
+promise.then(function(contents) {
+    // fulfillment
+    console.log(contents);
+});
+
+promise.then(null, function(err) {
+    // rejection
+    console.error(err.message);
+});
+
+
+```
+> Note - Any object that implements the then() method as described in the preceding paragraph is called a thenable. All promises are thenables, but all thenables are not promises.
+
+The 3 states of a Promise are:
 
 1. **<ins>Unsettled</ins>** - which is a pending Promise. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
