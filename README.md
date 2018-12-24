@@ -105,6 +105,7 @@ Each promise goes through a short life cycle starting in the pending state, whic
  1. The first argument is a function to call when the promise is <ins>fulfilled</ins>.
  2. The second argument is a function to call when the promise is rejected.
 
+> ***Note - Any object that implements the then() method as described in the preceding paragraph is called a thenable. All promises are thenables, but all thenables are not promises. ***
 The three states of a Promise are:
 
 1. **<ins>Unsettled</ins>** - which is a pending Promise. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
