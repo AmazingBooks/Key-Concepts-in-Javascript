@@ -128,7 +128,14 @@ promise.then(null, function(err) {
 
 
 ```
-> Note - Any object that implements the then() method as described in the preceding paragraph is called a thenable. All promises are thenables, but all thenables are not promises.
+The then() and catch() methods are intended to be used in combination to properly handle the result of asynchronous operations. 
+Events tend not to fire when there’s an error, and in callbacks you must always remember to check the error argument.
+Just know that if you don’t attach a rejection handler to a promise, all failures will happen silently. Always attach a rejection handler, even if the handler just logs the failure.
+
+> IMPORTANT
+>  - Any object that implements the then() method as described in the preceding paragraph is called a thenable. All promises are thenables, but all thenables are not promises.
+>  - Each call to then() or catch() creates a new job to be executed when the promise is resolved. But these jobs end up in a separate job queue that is reserved strictly for promises
+>  - 
 
 The 3 states of a Promise are:
 
