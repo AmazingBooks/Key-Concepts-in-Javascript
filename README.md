@@ -83,4 +83,18 @@ method1(function(err, result) {
     });
 
 });
-```
+``` 
+Callbacks also present problems when you want to implement more complex functionality. What if you want two asynchronous operations to run in parallel and notify you when they’re both complete? What if you want to start two asynchronous operations at the same time but only take the result of the first one to complete? In these cases, you’d need to track multiple callbacks and cleanup operations, and promises greatly improve such situations.
+
+
+**Promise Basics**
+A promise is a placeholder for the result of an asynchronous operation. Instead of subscribing to an event or passing a callback to a function, the function can return a promise, as shown here:
+
+```javascript
+// readFile promises to complete at some point in the future
+let promise = readFile("example.txt");
+``` 
+In this code, readFile() doesn’t start reading the file immediately: that will happen later. Instead, the function returns a promise object representing the asynchronous read operation so you can work with it in the future. Exactly when you’ll be able to work with that result depends entirely on how the promise’s life cycle concludes.
+
+***The Promise Life Cycle***
+Each promise goes through a short life cycle starting in the pending state, which indicates that the asynchronous operation hasn’t completed yet. A pending promise is considered <ins>unsettled</ins>. The promise in the previous example is in the pending state as soon as the readFile() function returns it. Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
