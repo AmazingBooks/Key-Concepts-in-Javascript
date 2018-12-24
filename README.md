@@ -187,6 +187,7 @@ When either resolve() or reject() is called inside the executor, a job is added 
 For instance, the setTimeout() function lets you specify a delay before a job is added to the queue:
 ```javascript
 // add this function to the job queue after 500 ms have passed
+//This code schedules a job to be added to the job queue after 500 ms.
 setTimeout(function() {
     console.log("Timeout");
 }, 500)
