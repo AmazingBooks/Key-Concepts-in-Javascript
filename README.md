@@ -135,7 +135,7 @@ Just know that if you don’t attach a rejection handler to a promise, all failu
 > <ins>IMPORTANT</ins>
 >  - Any object that implements the then() method as described in the preceding paragraph is called a thenable. All promises are thenables, but all thenables are not promises.
 >  - Each call to then() or catch() creates a new job to be executed when the promise is resolved. But these jobs end up in a separate job queue that is reserved strictly for promises
->  - 
+>  
 
 The 3 states of a Promise are:
 
@@ -202,6 +202,20 @@ let promise = new Promise(function(resolve, reject) {
 });
 console.log("Hi!");
 ```
+Calling resolve() triggers an asynchronous operation. Functions passed to then() and catch() are executed asynchronously, because these are also added to the job queue. Here’s an example:
+```javascript
+let promise = new Promise(function(resolve, reject) {
+    console.log("Promise");
+    resolve();
+});
+
+promise.then(function() {
+    console.log("Resolved.");
+});
+
+console.log("Hi!");
+```
+
 Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
