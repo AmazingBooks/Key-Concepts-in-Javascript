@@ -238,10 +238,21 @@ promise.then(function(value) {
 });
 
 ```
-
 ##### NOTE: 
 If you pass a promise to either the Promise.resolve() or Promise.reject() method, the promise is returned without modification.
 
+****Non-Promise Thenables***
+Both Promise.resolve() and Promise.reject() also accept non-promise thenables as arguments. 
+When passed a non-promise thenable, these methods create a new promise that is called after the then() function.
+A non-promise thenable is created when an object has a then() method that accepts a resolve and a reject argument, like this:
+
+```javascript
+let thenable = {
+    then: function(resolve, reject) {
+        resolve(42);
+    }
+};
+```
 Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
