@@ -216,6 +216,19 @@ promise.then(function() {
 console.log("Hi!");
 ```
 
+**Creating Settled Promises**
+How do we create Settled Promises? - The Promise constructor is the best way to create unsettled promises due to the dynamic nature of what the promise executor does. But if you want a promise to represent just a single known value doesn’t make sense to schedule a job that simply passes a value to the resolve() function. Instead, you can use either of two methods that create settled promises given a specific value.
+
+Using Promise.resolve() - The Promise.resolve() method accepts a single argument and returns a promise in the fulfilled state.
+
+```javascript
+let promise = Promise.resolve(42);
+promise.then(function(value) {
+    console.log(value);         // 42
+});
+
+```
+
 Once the asynchronous operation completes, the promise is considered settled and enters one of two possible states:
 
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
