@@ -288,5 +288,26 @@ process.on("unhandledRejection", function(reason, promise) {
 });
 
 rejected = Promise.reject(new Error("Explosion!"));
+```
+These events are designed to work together to help identify promises that are rejected and not handled.
 
+###### Browser Rejection Handling
+Browsers also emit two events to help identify unhandled rejections. These events are emitted by the window object and are effectively the same as their Node.js equivalents:
+ - unhandledrejection -  Emitted when a promise is rejected and no rejection handler is called within one turn of the event loop.
+ - rejectionhandled - Emitted when a promise is rejected and a rejection handler is called after one turn of the event loop. 
  
+ ##### Chaining Promises
+Each call to then() or catch() actually creates and returns another promise.
+This second promise is resolved only when the first has been fulfilled or rejected. Consider the example below:
+
+```javascript
+let p1 = new Promise(function(resolve, reject) {
+    resolve(42);
+});
+//The call to p1.then() returns a second promise on which then() is called. The second then() fulfillment handler is only called after the first promise has been resolved. 
+p1.then(function(value) {
+    console.log(value);
+}).then(function() {
+    console.log("Finished");
+});
+```
