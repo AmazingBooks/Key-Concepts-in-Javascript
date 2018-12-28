@@ -296,7 +296,7 @@ Browsers also emit two events to help identify unhandled rejections. These event
  - unhandledrejection -  Emitted when a promise is rejected and no rejection handler is called within one turn of the event loop.
  - rejectionhandled - Emitted when a promise is rejected and a rejection handler is called after one turn of the event loop. 
  
- ##### Chaining Promises
+ ### Chaining Promises
 Each call to then() or catch() actually creates and returns another promise.
 This second promise is resolved only when the first has been fulfilled or rejected. Consider the example below:
 
@@ -311,3 +311,115 @@ p1.then(function(value) {
     console.log("Finished");
 });
 ```
+#### Returning Values in Promise Chains
+Another important aspect of promise chains is the ability to pass data from one promise to the next. 
+
+```javascript
+let p1 = new Promise(function(resolve, reject) {
+    resolve(42);
+});
+
+p1.then(function(value) {
+    console.log(value);         // "42"
+    return value + 1;
+//The fulfillment handler for p1 returns value + 1 when executed. Because value is 42 (from the executor), 
+//    the fulfillment handler returns 43.
+}).then(function(value) {
+    console.log(value);         // "43"
+});
+```
+
+#### Returning Promises in Promise Chains
+Returning primitive values from fulfillment and rejection handlers allows for the passing of data between promises, but what if you return an object? If the object is a promise, there’s an extra step that’s taken to determine how to proceed. Consider the following example:
+
+```javascript
+let p1 = new Promise(function(resolve, reject) {
+    resolve(42);
+});
+
+let p2 = new Promise(function(resolve, reject) {
+    resolve(43);
+});
+
+p1.then(function(value) {
+    // p1 schedules a job that resolves to 42. 
+    // first fulfillment handler
+    console.log(value);     // 42
+    // The fulfillment handler for p1 returns p2, a promise already in the resolved state. 
+    return p2;    
+}).then(function(value) {
+    // second fulfillment handler
+    // The second fulfillment handler is called because p2 has been fulfilled. 
+    // If p2 were rejected, a rejection handler (if present) would be called instead of the second fulfillment handler.   
+    // The important thing to recognize about this pattern is that the second fulfillment handler is not added to p2 but rather to a third promise. 
+    console.log(value);     // 43
+});
+```
+#### Responding to Multiple Promises
+Each example in this chapter so far has dealt with responding to one promise at a time. But sometimes you’ll want to monitor the progress of multiple promises to determine the next action. 
+ECMAScript 6 provides two methods that monitor multiple promises: **Promise.all()** and **Promise.race()**.
+
+##### The Promise.all() Method
+Accepts a single argument, which is an iterable (such as an array) of promises to monitor, and returns a promise that is resolved only when every promise in the iterable is resolved. The returned promise is fulfilled when every promise in the iterable is fulfilled, as in this example:
+
+```javascript
+let p1 = new Promise(function(resolve, reject) {
+    resolve(42);
+});
+
+let p2 = new Promise(function(resolve, reject) {
+    resolve(43);
+});
+
+let p3 = new Promise(function(resolve, reject) {
+    resolve(44);
+});
+
+let p4 = Promise.all([p1, p2, p3]);
+
+p4.then(function(value) {
+    console.log(Array.isArray(value));  // true
+    console.log(value[0]);              // 42
+    console.log(value[1]);              // 43
+    console.log(value[2]);              // 44
+});
+```
+
+##### The Promise.race() Method
+Provides a slightly different take on monitoring multiple promises. This method also accepts an iterable of promises to monitor and returns a promise, but the returned promise is settled as soon as the first promise is settled. Instead of waiting for all promises to be fulfilled, like the Promise.all() method, the Promise.race() method returns an appropriate promise as soon as any promise in the array is fulfilled. For example:
+
+```javascript
+let p1 = Promise.resolve(42);
+
+let p2 = new Promise(function(resolve, reject) {
+    resolve(43);
+});
+
+let p3 = new Promise(function(resolve, reject) {
+    resolve(44);
+});
+
+let p4 = Promise.race([p1, p2, p3]);
+
+p4.then(function(value) {
+    console.log(value);     // 42
+});
+```
+
+### Catching Errors
+Promise chaining allows you to catch errors that may occur in a fulfillment or rejection handler from a previous promise. For example:
+```javascript
+let p1 = new Promise(function(resolve, reject) {
+    resolve(42);
+});
+
+p1.then(function(value) {
+    throw new Error("Boom!");
+// In this code, the fulfillment handler for p1 throws an error. 
+// The chained call to the catch() method, which is on a second promise, is able to receive that error through its rejection handler. 
+}).catch(function(error) {
+    console.log(error.message);     // "Boom!"
+});
+```
+Always make sure to have a rejection handler at the end of a promise chain to ensure that you can properly handle any errors that may occur.
+
