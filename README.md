@@ -258,3 +258,35 @@ Once the asynchronous operation completes, the promise is considered settled and
 2. **Fulfilled** - The promise’s asynchronous operation has completed successfully.
 
 3. **Rejected** - The promise’s asynchronous operation didn’t complete successfully due to either an error or some other cause.
+One of the most controversial aspects of promises is the silent failure that occurs when a promise is rejected without a rejection handler. Some consider this the biggest flaw in the specification because it’s the only part of the JavaScript language that doesn’t make errors apparent. You can call then() or catch() at any point and have them work correctly regardless of whether the promise is settled or not, making it difficult to know precisely when a promise will be handled. 
+Although it’s possible that a future version of ECMAScript will address this problem, both Node.js and browsers have implemented changes to address this developer pain point. They aren’t part of the ECMAScript 6 specification but are valuable tools when you’re using promises.
+
+###### Node.js Rejection Handling
+
+Node.js emits two events on the process object that are related to promise rejection handling:
+ - unhandledRejection - Emitted when a promise is rejected and no rejection handler is called within one turn of the event loop.
+ 
+ ```javascript
+let rejected;
+
+process.on("unhandledRejection", function(reason, promise) {
+    console.log(reason.message);            // "Explosion!"
+    console.log(rejected === promise);      // true
+});
+
+rejected = Promise.reject(new Error("Explosion!"));
+
+```
+ - rejectionHandled - Emitted when a promise is rejected and a rejection handler is called after one turn of the event loop. 
+ 
+  ```javascript
+let rejected;
+
+process.on("unhandledRejection", function(reason, promise) {
+    console.log(reason.message);            // "Explosion!"
+    console.log(rejected === promise);      // true
+});
+
+rejected = Promise.reject(new Error("Explosion!"));
+
+ 
