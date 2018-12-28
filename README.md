@@ -406,6 +406,40 @@ p4.then(function(value) {
 });
 ```
 
+##### Inheriting from Promises
+Just like other built-in types, you can use a promise as the base for a derived class. This allows you to define your own variation of promises to extend what built-in promises can do.
+For instance, suppose you want to create a promise that can use methods named success() and failure() in addition to the usual then() and catch() methods. You could create that promise type as follows:
+
+```javascript
+class MyPromise extends Promise {
+
+    // use default constructor
+
+    success(resolve, reject) {
+        return this.then(resolve, reject);
+    }
+
+    failure(reject) {
+        return this.catch(reject);
+    }
+
+}
+
+// MyPromise is derived from Promise and has two additional methods. 
+// The success() method mimics resolve() and failure() mimics the reject() method.
+let promise = new MyPromise(function(resolve, reject) {
+    resolve(42);
+});
+
+promise.success(function(value) {
+    console.log(value);             // 42
+}).failure(function(value) {
+    console.log(value);
+});
+
+
+```
+
 ### Catching Errors
 Promise chaining allows you to catch errors that may occur in a fulfillment or rejection handler from a previous promise. For example:
 ```javascript
@@ -423,3 +457,26 @@ p1.then(function(value) {
 ```
 Always make sure to have a rejection handler at the end of a promise chain to ensure that you can properly handle any errors that may occur.
 
+### FUTURE ASYNCHRONOUS TASK RUNNING
+Bringing a simpler syntax to asynchronous task running in JavaScript is under way. For instance, an await syntax is in progress. 
+The basic idea is to use a function marked with async instead of a generator and use await instead of yield when calling a function, such as:
+
+```javascript
+(async function() {
+    let contents = await readFile("config.json");
+    doSomethingWith(contents);
+    console.log("Done");
+});
+```
+The async keyword before function indicates that the function is meant to run in an asynchronous manner. The await keyword signals that the function call to readFile("config.json") should return a promise, and if it doesn’t, the response should be wrapped in a promise.
+The await syntax is expected to be finalized in ECMAScript 2017 (ECMAScript 8).
+
+### Summary
+ 1. Promises are designed to improve asynchronous programming in JavaScript by giving you more control and composability over asynchronous operations than events and callbacks can.
+ 2. Promises schedule jobs to be added to the JavaScript engine’s job queue for future execution, and a second job queue tracks promise fulfillment and rejection handlers to ensure proper execution.
+ 3. Promises have three states: pending, fulfilled, and rejected. A promise starts in a pending state and becomes fulfilled on a successful execution or rejected on a failure. In either case, you can add handlers to indicate when a promise is settled. The then() method allows you to assign a fulfillment and rejection handler, and the catch() method allows you to assign only a rejection handler.
+ 4. You can chain promises together in a variety of ways and pass information between them. Each call to then() creates and returns a new promise that is resolved when the previous one is resolved. Such chains can be used to trigger responses to a series of asynchronous events. You can also use Promise.race() and Promise.all() to monitor the progress of multiple promises and respond accordingly.
+ 5. Asynchronous task running is easier when you combine generators and promises, because promises provide a common interface that asynchronous operations can return.
+ 6. Most new web APIs are being built on top of promises, and you can expect many more to follow suit in the future.
+ 
+ 
