@@ -480,3 +480,14 @@ The await syntax is expected to be finalized in ECMAScript 2017 (ECMAScript 8).
  6. Most new web APIs are being built on top of promises, and you can expect many more to follow suit in the future.
  
  
+ ## PROXIES AND THE REFLECTION API
+Proxies were introduced in ECMAScript 6 and allows developers to create built-in objects.
+**What are Proxies?** 
+- Proxies are wrappers that can intercept and alter low-level JavaScript engine operations.
+- Calling <ins>**new Proxy()**</ins> creates a proxy to use in place of another object (called the target). The proxy virtualizes the target so the proxy and the target appear to be functionally the same. 
+- Proxies allow you to intercept low-level object operations on the target that are otherwise internal to the JavaScript engine. 
+- These low-level operations are intercepted using a trap, which is a function that responds to a specific operation.
+-   
+##### Note
+  - The nonstandard behavior of numeric properties and the length property is why arrays are considered exotic objects in ECMAScript 6.
+   
