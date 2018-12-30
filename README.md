@@ -517,7 +517,8 @@ Proxies were introduced in ECMAScript 6 and allows developers to create built-in
  
  #### Creating a Simple Proxy
  When you use the Proxy constructor to make a proxy, you’ll pass it two arguments: the **target** and a **handler**. 
- What is a handler? - A handler is an object that defines one or more traps. The proxy uses the default behavior for all operations except when traps are defined for that operation. To create a simple forwarding proxy, you can use a handler with no traps, like this:
+ **What is a handler?** - A handler is an object that defines one or more traps. 
+ To create a simple forwarding proxy, you can use a handler with no traps, like this:
  
 ```javascript 
 let target = {};
