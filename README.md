@@ -490,7 +490,8 @@ Proxies were introduced in ECMAScript 6 and allows developers to create built-in
 - Proxies allow you to intercept low-level object operations on the target that are otherwise internal to the JavaScript Engine. 
 - Calling <ins>**new Proxy()**</ins> creates a proxy to use in place of another object (called the target). The proxy virtualizes the target so the proxy and the target appear to be functionally the same. 
 - These low-level operations are intercepted using a Trap, which is a function that responds to a specific operation.
-- For each Proxy Trap there is a Reflect method attached.  
+- For each Proxy Trap there is a Reflect method attached. Each trap overrides some built-in behavior of JavaScript objects, allowing you to intercept and modify the behavior. If you still need to use the built-in behavior, you can use the corresponding reflection API method.
+- 
 
 ##### Reflection API 
 - Is represented by the Reflect object and it is a collection of methods that provide the default behavior for the same low-level operations that proxies can override. 
@@ -512,6 +513,22 @@ Proxies were introduced in ECMAScript 6 and allows developers to create built-in
 
 ##### Note
   - The nonstandard behavior of numeric properties and the length property is why arrays are considered exotic objects in ECMAScript 6.
-  
+  - The original ECMAScript 6 specification had an additional trap called **enumerate** that was designed to alter how for-in and Object.keys() enumerated properties on an object. However, the enumerate trap was removed in ECMAScript 7 (also called ECMAScript 2016) because difficulties were discovered during implementation. The enumerate trap no longer exists in any JavaScript environment.
  
-   
+ #### Creating a Simple Proxy
+ When you use the Proxy constructor to make a proxy, you’ll pass it two arguments: the **target** and a **handler**. 
+ What is a handler? - A handler is an object that defines one or more traps. The proxy uses the default behavior for all operations except when traps are defined for that operation. To create a simple forwarding proxy, you can use a handler with no traps, like this:
+ 
+```javascript 
+let target = {};
+
+let proxy = new Proxy(target, {});
+proxy.name = "proxy";
+
+console.log(proxy.name);        // "proxy"
+console.log(target.name);       // "proxy"
+
+target.name = "target";
+console.log(proxy.name);        // "target"
+console.log(target.name);       // "target"
+```
