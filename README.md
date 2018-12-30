@@ -482,12 +482,36 @@ The await syntax is expected to be finalized in ECMAScript 2017 (ECMAScript 8).
  
  ## PROXIES AND THE REFLECTION API
 Proxies were introduced in ECMAScript 6 and allows developers to create built-in objects.
+
 **What are Proxies?** 
 - Proxies are wrappers that can intercept and alter low-level JavaScript engine operations.
+
+**What can you do with a Proxy?**
+- Proxies allow you to intercept low-level object operations on the target that are otherwise internal to the JavaScript Engine. 
 - Calling <ins>**new Proxy()**</ins> creates a proxy to use in place of another object (called the target). The proxy virtualizes the target so the proxy and the target appear to be functionally the same. 
-- Proxies allow you to intercept low-level object operations on the target that are otherwise internal to the JavaScript engine. 
-- These low-level operations are intercepted using a trap, which is a function that responds to a specific operation.
--   
+- These low-level operations are intercepted using a Trap, which is a function that responds to a specific operation.
+- For each Proxy Trap there is a Reflect method attached.  
+
+##### Reflection API 
+- Is represented by the Reflect object and it is a collection of methods that provide the default behavior for the same low-level operations that proxies can override. 
+
+| Proxy trap    | Overrides the behavior |
+| ------------- |:----------------------:|
+| get           | Reading a prop value   | 
+| set           | Writing a prop value   | 
+| has           | The in operator        | 
+| deleteProperty| The delete property    | 
+| getPrototypeOf| Object.getPrototypeOf()| 
+| setPrototypeOf| Object.setPrototypeOf()| 
+| isExtensible  | Object.isExtensible()  | 
+| preventExtensions| Object.preventExtensions| 
+| getOwnPropertyDescriptor| Object.getOwnPropertyDescriptor()| 
+| defineProperty| Object.defineProperty()| 
+| ownKeys       | Object.keys(), Object.getOwnPropertyNames(), and Object.getOwnPropertySym   | 
+
+
 ##### Note
   - The nonstandard behavior of numeric properties and the length property is why arrays are considered exotic objects in ECMAScript 6.
+  
+ 
    
