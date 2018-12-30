@@ -496,7 +496,7 @@ Proxies were introduced in ECMAScript 6 and allows developers to create built-in
 - Is represented by the Reflect object and it is a collection of methods that provide the default behavior for the same low-level operations that proxies can override. 
 
 | Proxy trap    | Overrides the behavior |
-| ------------- |:----------------------:|
+| ------------- |----------------------:|
 | get           | Reading a prop value   | 
 | set           | Writing a prop value   | 
 | has           | The in operator        | 
@@ -507,7 +507,8 @@ Proxies were introduced in ECMAScript 6 and allows developers to create built-in
 | preventExtensions| Object.preventExtensions| 
 | getOwnPropertyDescriptor| Object.getOwnPropertyDescriptor()| 
 | defineProperty| Object.defineProperty()| 
-| ownKeys       | Object.keys(), Object.getOwnPropertyNames(), and Object.getOwnPropertySym   | 
+| ownKeys       | Object.keys(), Object.getOwnPropertyNames(), 
+                  and Object.getOwnPropertySym   | 
 
 
 ##### Note
