@@ -586,5 +586,8 @@ console.log(target.name);       // "proxy"
 proxy.anotherName = "proxy";
     
 ```
+
+**Code explained:** 
+The _trapTarget_ value is equal to **target**, _key_ is **count**, _value_ is **1**, and _receiver_ (not used in this example) is **proxy**. There is no existing property named count in target, so the _proxy validates_ value by passing it to __isNaN()__. If the result is NaN, the property value is not numeric and an error is thrown. Because this code sets count to 1, the proxy calls Reflect.set() with the same four arguments that were passed to the trap to add the new property.
     
     
