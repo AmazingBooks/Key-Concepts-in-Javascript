@@ -588,6 +588,51 @@ proxy.anotherName = "proxy";
 ```
 
 **Code explained:** 
+
 The _trapTarget_ value is equal to **target**, _key_ is **count**, _value_ is **1**, and _receiver_ (not used in this example) is **proxy**. There is no existing property named count in target, so the _proxy validates_ value by passing it to __isNaN()__. If the result is NaN, the property value is not numeric and an error is thrown. Because this code sets count to 1, the proxy calls Reflect.set() with the same four arguments that were passed to the trap to add the new property.
     
-    
+**Reflect.get()** -  Object Shape Validation Using the get Trap. An object shape is the collection of properties and methods available on the object. JavaScript engines use object shapes to optimize code, often creating classes to represent the objects.
+
+Here’s an example:
+```javascript 
+let target = {};
+//since it was not defined return undefined
+console.log(target.name);    // undefined
+
+```
+
+In most other languages, attempting to read target.name throws an error because the property doesn’t exist. But JavaScript just uses undefined for the value of the target.name property. 
+
+Because property validation only has to happen when a property is read, you would use the get trap. The get trap is called when a property is read, even if that property doesn’t exist on the object, and it takes three arguments:
+
+
+```javascript 
+**trapTarget** -  The object from which the property is read (the proxy’s target)
+**key** - The property key (a string or symbol) to read.
+**value** - The value being written to the property
+**receiver** - The object on which the operation took place (usually the proxy)
+
+```
+These arguments mirror the set trap’s arguments but with one noticeable difference. There’s no value argument because get traps don’t write values. The __Reflect.get()__ method accepts the same **three arguments** as the _get trap()_ and returns the property’s default value. You can use the get trap and Reflect.get() to throw an error when a property doesn’t exist on the target, as follows:
+
+```javascript 
+let proxy = new Proxy({}, {
+    get(trapTarget, key, receiver) {
+        if (!(key in receiver)) {
+            throw new TypeError("Property " + key + " doesn't exist.");
+        }
+
+        return Reflect.get(trapTarget, key, receiver);
+    }
+});
+
+// adding a property still works
+proxy.name = "proxy";
+console.log(proxy.name);            // "proxy"
+
+// nonexistent properties throw an error
+console.log(proxy.nme);             // throws an error
+
+```
+
+
