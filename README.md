@@ -529,7 +529,21 @@ proxy.name = "proxy";
 console.log(proxy.name);        // "proxy"
 console.log(target.name);       // "proxy"
 
+//  Proxy forwards all operations directly to target. 
+//  When "proxy" is assigned to the proxy.name property, name is created on target. 
+//  The proxy is not storing this property; it’s simply forwarding the operation to target. 
+//  Similarly, the values of proxy.name and target.name are the same because they are both references to target.name. 
+//  That also means setting target.name to a new value causes proxy.name to reflect the same change.
 target.name = "target";
 console.log(proxy.name);        // "target"
 console.log(target.name);       // "target"
+```
+**Of course, proxies without traps aren’t very interesting, so what happens when you define a trap?** 
+Suppose you want to create an object whose property values must be numbers. That means every new property added to the object must be validated, and an error must be thrown if the value isn’t a number. To accomplish this task, you could define a set trap that overrides the default behavior of setting a value. The set trap receives four arguments:
+
+```javascript 
+trapTarget The object that will receive the property (the proxy’s target)
+key The property key (string or symbol) to write to
+
+
 ```
