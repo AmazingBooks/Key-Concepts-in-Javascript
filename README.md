@@ -548,3 +548,27 @@ Suppose you want to create an object whose property values must be numbers. That
 **receiver** - The object on which the operation took place (usually the proxy)
 
 ```
+
+**Reflect.set()** -  is the set trap’s corresponding reflection method, and it’s the default behavior for this operation. The Reflect.set() method accepts the same four arguments as the set proxy trap, making the method easy to use inside the trap. The trap should return true if the property was set or false if not. (The Reflect.set() method returns the correct value based on whether the operation succeeded.) Here’s an example:
+
+```javascript 
+let target = {
+    name: "target"
+};
+
+let proxy = new Proxy(target, {
+    set(trapTarget, key, value, receiver) {
+
+        // ignore existing properties so as not to affect them
+        if (!trapTarget.hasOwnProperty(key)) {
+            if (isNaN(value)) {
+                throw new TypeError("Property must be a number.");
+            }
+        }
+
+        // add the property
+        return Reflect.set(trapTarget, key, value, receiver);
+    }
+    ```
+    
+    
