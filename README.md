@@ -552,6 +552,7 @@ Suppose you want to create an object whose property values must be numbers. That
 **Reflect.set()** -  is the set trap’s corresponding reflection method, and it’s the default behavior for this operation. The Reflect.set() method accepts the same four arguments as the set proxy trap, making the method easy to use inside the trap. The trap should return true if the property was set or false if not. (The Reflect.set() method returns the correct value based on whether the operation succeeded.) Here’s an example:
 
 ```javascript 
+
 let target = {
     name: "target"
 };
@@ -569,6 +570,21 @@ let proxy = new Proxy(target, {
         // add the property
         return Reflect.set(trapTarget, key, value, receiver);
     }
-    ```
+    });
+
+// adding a new property
+proxy.count = 1;
+console.log(proxy.count);       // 1
+console.log(target.count);      // 1
+
+// you can assign to name because it exists on target already
+proxy.name = "proxy";
+console.log(proxy.name);        // "proxy"
+console.log(target.name);       // "proxy"
+
+// throws an error
+proxy.anotherName = "proxy";
+    
+```
     
     
