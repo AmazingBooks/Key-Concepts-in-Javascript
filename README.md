@@ -542,8 +542,8 @@ console.log(target.name);       // "target"
 Suppose you want to create an object whose property values must be numbers. That means every new property added to the object must be validated, and an error must be thrown if the value isn’t a number. To accomplish this task, you could define a set trap that overrides the default behavior of setting a value. The set trap receives four arguments:
 
 ```javascript 
-trapTarget The object that will receive the property (the proxy’s target)
-key The property key (string or symbol) to write to
+**trapTarget** -  The object that will receive the property (the proxy’s target)
+**key** - The property key (string or symbol) to write to
 
 
 ```
