@@ -544,6 +544,7 @@ Suppose you want to create an object whose property values must be numbers. That
 ```javascript 
 **trapTarget** -  The object that will receive the property (the proxy’s target)
 **key** - The property key (string or symbol) to write to
-
+**value** - The value being written to the property
+**receiver** - The object on which the operation took place (usually the proxy)
 
 ```
