@@ -649,8 +649,8 @@ console.log("toString" in target);  // true
 Both _value_ and _toString_ exist on object, so in both cases the in operator returns true. The value property is an own property, whereas toString is a prototype property (inherited from Object). Proxies allow you to intercept this operation and return a different value for in with the has trap. The has trap is called whenever the in operator is used. When called, two arguments are passed to the has trap:
 
 ```
-__trapTarget__ -  The object the property is read from (the proxy’s target)
-__key__ The property key (string or symbol) to check
+trapTarget -  The object the property is read from (the proxy’s target)
+key - The property key (string or symbol) to check
 ```
 
 value for in with the has trap. The has trap is called whenever the in operator is used. When called, two arguments are passed to the has trap:
