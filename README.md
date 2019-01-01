@@ -634,5 +634,23 @@ console.log(proxy.name);            // "proxy"
 console.log(proxy.nme);             // throws an error
 
 ```
+**The _in_ Operator - or how to detect if an object has a certain property
 
+The _**in**_ operator determines whether a property exists on a given object and returns true if an own property or a prototype property matches the name or symbol. For example:
 
+```javascript 
+let target = {
+    value: 42;
+}
+
+console.log("value" in target);     // true
+console.log("toString" in target);  // true
+```
+Both _value_ and _toString_ exist on object, so in both cases the in operator returns true. The value property is an own property, whereas toString is a prototype property (inherited from Object). Proxies allow you to intercept this operation and return a different value for in with the has trap. The has trap is called whenever the in operator is used. When called, two arguments are passed to the has trap:
+
+```
+__trapTarget__ -  The object the property is read from (the proxy’s target)
+__key__ The property key (string or symbol) to check
+```
+
+value for in with the has trap. The has trap is called whenever the in operator is used. When called, two arguments are passed to the has trap:
