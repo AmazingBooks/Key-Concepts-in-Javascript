@@ -634,7 +634,7 @@ console.log(proxy.name);            // "proxy"
 console.log(proxy.nme);             // throws an error
 
 ```
-**The _in_ Operator - or how to detect if an object has a certain property
+**The _in_ Operator - or how to detect if an object has a certain property**
 
 The _**in**_ operator determines whether a property exists on a given object and returns true if an own property or a prototype property matches the name or symbol. For example:
 
@@ -646,11 +646,61 @@ let target = {
 console.log("value" in target);     // true
 console.log("toString" in target);  // true
 ```
-Both _value_ and _toString_ exist on object, so in both cases the in operator returns true. The value property is an own property, whereas toString is a prototype property (inherited from Object). Proxies allow you to intercept this operation and return a different value for in with the has trap. The has trap is called whenever the in operator is used. When called, two arguments are passed to the has trap:
+Both _value_ and _toString_ exist on object, so in both cases the in operator returns true. The value property is an own property, whereas toString is a prototype property (inherited from Object). Proxies allow you to intercept this operation and return a different value for in with the has trap. 
+The has trap is called whenever the _**in Operator**_ is used. When called, two arguments are passed to the has trap:
 
 ```
 trapTarget -  The object the property is read from (the proxy’s target)
 key - The property key (string or symbol) to check
+
+```
+  
+**Reflect.has() Method**
+Reflect.has() method accepts these same arguments and returns the default response for the _**in Operator**_. Using the has trap and Reflect.has() allows you to alter the behavior of in for some properties while reverting to the default behavior for others. For instance, you could hide the value property from the previous example like this:
+
+```javascript
+let target = {
+    name: "target",
+    value: 42
+};
+
+let proxy = new Proxy(target, {
+    has(trapTarget, key) {
+
+        if (key === "value") {
+            return false;
+        } else {
+            return Reflect.has(trapTarget, key);
+        }
+    }
+});
+console.log("value" in proxy);      // false
+console.log("name" in proxy);       // true
+console.log("toString" in proxy);   // true
 ```
 
-value for in with the has trap. The has trap is called whenever the in operator is used. When called, two arguments are passed to the has trap:
+### deleteProperty Trap
+The delete operator removes a property from an object and returns true when it’s successful and false when it’s unsuccessful. In strict mode, delete throws an error when you attempt to delete a nonconfigurable property; in non-strict mode, delete simply returns false. Here’s an example:
+
+```javascript
+let target = {
+    name: "target",
+    value: 42
+};
+Object.defineProperty(target, "name", { configurable: false });
+
+console.log("value" in target);     // true
+
+let result1 = delete target.value;
+console.log(result1);               // true
+
+console.log("value" in target);     // false
+
+// note: the following line throws an error in strict mode
+let result2 = delete target.name;
+console.log(result2);               // false
+
+console.log("name" in target);      // true
+
+```
+
