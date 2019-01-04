@@ -2,8 +2,13 @@
 A comprehensive and easy to understand guide for Javascript advanced concepts with examples and details. 
 Information is structured and gathered from different resources, mentioned in the Reference part of the book. 
 
+Below is a resume for the most important must known features in ES6 with code examples included: 
+  1. ROMISES AND ASYNCHRONOUS PROGRAMMING
+  2. PROXIES AND THE REFLECTION API
+  3. BLOCK BINDINGS
+  4. STRINGS AND REGULAR EXPRESSIONS
 
-## Promises 
+## 1. PROMISES and ASYNCHRONOUS PROGRAMMING
 ### What is a PROMISE? 
 A promise is an Object that keeps track whether a certain event has happened already or not and determines what happens after the event ends. A Promise implements the concept of a future value that we’re expecting.
 “It’s saying - hey get me some data from the server in the background and it promises that it will get that data”;
@@ -17,9 +22,89 @@ In more practical terms we can Produce and Consume Promises; so when we produce 
 
 ![Promise](https://raw.githubusercontent.com/AmazingBooks/Key-Concepts-in-Javascript/master/images/Promise.png)
 
+
 #### Asynchronous Programming Background
 
 JavaScript engines are built on the concept of a single-threaded event loop. Single-threaded means that only one piece of code is executed at a time. JavaScript engines can execute only one piece of code at a time, so they need to keep track of code that is meant to run. That code is kept in a job queue. Whenever a piece of code is ready to be executed, it is added to the job queue. When the JavaScript engine is finished executing code, the event loop executes the next job in the queue. The event loop is a process inside the JavaScript engine that monitors code execution and manages the job queue. Keep in mind that as a queue, job execution runs from the first job in the queue to the last.
+
+One of the most powerful aspects of JavaScript is how easily it handles Asynchronous Programming. As a language created for the web, JavaScript needed to be able to respond to Asynchronous user interactions, such as clicks and key presses, from the beginning. But as more programs started using asynchronous programming, events and callbacks weren’t powerful enough to support everything developers wanted to do. Promises are the solution to this problem.
+
+JavaScript engines are built on the concept of a _Single-threaded event loop_. Single-threaded means that only one piece of code is executed at a time. Maintaining and protecting state when multiple pieces of code can access and change that state is a difficult problem and a frequent source of bugs in thread-based software.
+
+JavaScript engines can execute only one piece of code at a time, so they need to keep track of code that is meant to run. That code is kept in a job queue. Whenever a piece of code is ready to be executed, it is added to the job queue. When the JavaScript engine is finished executing code, the event loop executes the next job in the queue. The event loop is a process inside the JavaScript engine that monitors code execution and manages the job queue. Keep in mind that as a queue, job execution runs from the first job in the queue to the last.
+
+#### The Event Model
+
+When a user clicks a button or presses a key on the keyboard, an event like onclick is triggered. That event might respond to the interaction by adding a new job to the back of the job queue. This is JavaScript’s most basic form of Asynchronous Programming. The event handler code doesn’t execute until the event fires, and when it does execute, it has the appropriate context. For example:
+
+```javascript
+let button = document.getElementById("my-btn");
+button.onclick = function(event) {
+    console.log("Clicked");
+};
+```
+In this code, console.log("Clicked") will not be executed until button is clicked. When button is clicked, the function assigned to onclick is added to the back of the job queue and will be executed when all other jobs ahead of it are complete.
+Events work well for simple interactions, but chaining multiple separate asynchronous calls together is more complicated because you must keep track of the event target (button in this example) for each event. Additionally, you need to ensure that all appropriate event handlers are added before the first time an event occurs. For instance, if button is clicked before onclick is assigned, nothing will happen. So although events are useful for responding to user interactions and similar infrequent functionality, they aren’t very flexible for more complex needs.
+
+#### The Callback Pattern > Callback Hell
+The callback pattern is more flexible than events because chaining multiple calls together is easier with callbacks. Here’s an example:
+
+```javascript
+readFile("example.txt", function(err, contents) {
+if(err){
+  throw err;
+}
+writeFile( 'info.text', if(err) {
+  throw err;
+})
+console.log('File was writtten!');
+  )}; 
+)};
+```
+The above pattern works fairly well, but you can quickly find yourself in callback hell. Callback hell occurs when you nest too many callbacks, like this:
+
+```javascript
+method1(function(err, result) {
+
+    if (err) {
+        throw err;
+    }
+
+    method2(function(err, result) {
+
+        if (err) {
+            throw err;
+        }
+
+        method3(function(err, result) {
+
+            if (err) {
+                throw err;
+            }
+
+            method4(function(err, result) {
+
+                if (err) {
+                    throw err;
+                }
+
+                method5(result);
+            });
+
+        });
+
+    });
+
+});
+
+```
+
+Nesting multiple method calls, as this example does, creates a tangled web of code that is difficult to understand and debug. 
+Callbacks also present problems when you want to implement more complex functionality. 
+    - What if you want two asynchronous operations to run in parallel and notify you when they’re both complete? 
+    - What if you want to start two asynchronous operations at the same time but only take the result of the first one to complete? 
+In these cases, you’d need to track multiple callbacks and cleanup operations, and promises greatly improve such situations.
+
 
 **The Event Model**
 When a user clicks a button or presses a key on the keyboard, an event like onclick is triggered. That event might respond to the interaction by adding a new job to the back of the job queue. This is JavaScript’s most basic form of asynchronous programming. The event handler code doesn’t execute until the event fires, and when it does execute, it has the appropriate context. 
@@ -480,7 +565,7 @@ The await syntax is expected to be finalized in ECMAScript 2017 (ECMAScript 8).
  6. Most new web APIs are being built on top of promises, and you can expect many more to follow suit in the future.
  
  
- ## PROXIES AND THE REFLECTION API
+ ## 2. PROXIES AND THE REFLECTION API
 Proxies were introduced in ECMAScript 6 and allows developers to create built-in objects.
 
 **What are Proxies?** 
@@ -704,87 +789,8 @@ console.log("name" in target);      // true
 
 ```
 
-### PROMISES AND ASYNCHRONOUS PROGRAMMING
-One of the most powerful aspects of JavaScript is how easily it handles Asynchronous Programming. As a language created for the web, JavaScript needed to be able to respond to Asynchronous user interactions, such as clicks and key presses, from the beginning. But as more programs started using asynchronous programming, events and callbacks weren’t powerful enough to support everything developers wanted to do. Promises are the solution to this problem.
-
-JavaScript engines are built on the concept of a _Single-threaded event loop_. Single-threaded means that only one piece of code is executed at a time. Maintaining and protecting state when multiple pieces of code can access and change that state is a difficult problem and a frequent source of bugs in thread-based software.
-
-JavaScript engines can execute only one piece of code at a time, so they need to keep track of code that is meant to run. That code is kept in a job queue. Whenever a piece of code is ready to be executed, it is added to the job queue. When the JavaScript engine is finished executing code, the event loop executes the next job in the queue. The event loop is a process inside the JavaScript engine that monitors code execution and manages the job queue. Keep in mind that as a queue, job execution runs from the first job in the queue to the last.
-
-#### The Event Model
-
-When a user clicks a button or presses a key on the keyboard, an event like onclick is triggered. That event might respond to the interaction by adding a new job to the back of the job queue. This is JavaScript’s most basic form of Asynchronous Programming. The event handler code doesn’t execute until the event fires, and when it does execute, it has the appropriate context. For example:
-
-```javascript
-let button = document.getElementById("my-btn");
-button.onclick = function(event) {
-    console.log("Clicked");
-};
-```
-In this code, console.log("Clicked") will not be executed until button is clicked. When button is clicked, the function assigned to onclick is added to the back of the job queue and will be executed when all other jobs ahead of it are complete.
-Events work well for simple interactions, but chaining multiple separate asynchronous calls together is more complicated because you must keep track of the event target (button in this example) for each event. Additionally, you need to ensure that all appropriate event handlers are added before the first time an event occurs. For instance, if button is clicked before onclick is assigned, nothing will happen. So although events are useful for responding to user interactions and similar infrequent functionality, they aren’t very flexible for more complex needs.
-
-#### The Callback Pattern > Callback Hell
-The callback pattern is more flexible than events because chaining multiple calls together is easier with callbacks. Here’s an example:
-
-```javascript
-readFile("example.txt", function(err, contents) {
-if(err){
-  throw err;
-}
-writeFile( 'info.text', if(err) {
-  throw err;
-})
-console.log('File was writtten!');
-  )}; 
-)};
-```
-The above pattern works fairly well, but you can quickly find yourself in callback hell. Callback hell occurs when you nest too many callbacks, like this:
-
-```javascript
-method1(function(err, result) {
-
-    if (err) {
-        throw err;
-    }
-
-    method2(function(err, result) {
-
-        if (err) {
-            throw err;
-        }
-
-        method3(function(err, result) {
-
-            if (err) {
-                throw err;
-            }
-
-            method4(function(err, result) {
-
-                if (err) {
-                    throw err;
-                }
-
-                method5(result);
-            });
-
-        });
-
-    });
-
-});
-
-```
-
-Nesting multiple method calls, as this example does, creates a tangled web of code that is difficult to understand and debug. 
-Callbacks also present problems when you want to implement more complex functionality. 
-    - What if you want two asynchronous operations to run in parallel and notify you when they’re both complete? 
-    - What if you want to start two asynchronous operations at the same time but only take the result of the first one to complete? 
-In these cases, you’d need to track multiple callbacks and cleanup operations, and promises greatly improve such situations.
-
-
-
+## 3. BLOCK BINDINGS
+STRINGS AND REGULAR EXPRESSIONS
 
 
 
