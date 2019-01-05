@@ -5,8 +5,8 @@ Information is structured and gathered from different resources, mentioned in th
 Below is a resume for the most important must known features in ES6 with code examples included: 
   1. ROMISES AND ASYNCHRONOUS PROGRAMMING
   2. PROXIES AND THE REFLECTION API
-  3. BLOCK BINDINGS
-  4. STRINGS AND REGULAR EXPRESSIONS
+  3. STRINGS AND REGULAR EXPRESSIONS
+  4. BLOCK BINDINGS
 
 ## 1. PROMISES and ASYNCHRONOUS PROGRAMMING
 ### What is a PROMISE? 
@@ -788,9 +788,115 @@ console.log(result2);               // false
 console.log("name" in target);      // true
 
 ```
+## 3. STRINGS AND REGULAR EXPRESSIONS
+In ECMAScript 6 strings and regular expressions are improved, by adding new capabilities and long-missing functionality. 
 
-## 3. BLOCK BINDINGS
-STRINGS AND REGULAR EXPRESSIONS
+In ECMAScript 5, all string operations work on 16-bit code units, meaning that you can get unexpected results from UTF-16 encoded strings containing surrogate pairs, as in this example:
+
+```javascript
+let text = "𠮷";
+
+console.log(text.length);           // 2
+console.log(/^.$/.test(text));      // false
+console.log(text.charAt(0));        // ""
+console.log(text.charAt(1));        // ""
+console.log(text.charCodeAt(0));    // 55362
+console.log(text.charCodeAt(1));    // 57271
+
+```
+The single Unicode character "𠮷" is represented using surrogate pairs, and as such, the JavaScript string operations in this example treat the string as having two 16-bit characters. That means:
+• The length of text is 2 when it should be 1.
+• A regular expression trying to match a single character fails because it thinks there are two characters.
+• The charAt() method is unable to return a valid character string because neither set of 16 bits corresponds to a printable character.
+• The charCodeAt() method also can’t identify the character properly. It returns the appropriate 16-bit number for each code unit, but that is the closest you could get to the real value of text in ECMAScript 5.
+
+ECMAScript 6 enforces UTF-16 string encoding to address problems like those mentioned above. Standardizing string operations based on this character encoding means that JavaScript can support functionality designed to work specifically with surrogate pairs. 
+
+ECMASCRIPT6 Methods added to fully support UTF-16 are:
+  - **codePointAt()** -  retrieves the Unicode code point that maps to a given position in a string. This method accepts the code unit position rather than the character position and returns an integer value. 
+  
+ ```javascript
+ let text = "𠮷a";
+
+console.log(text.charCodeAt(0));    // 55362
+console.log(text.charCodeAt(1));    // 57271
+console.log(text.charCodeAt(2));    // 97
+
+console.log(text.codePointAt(0));   // 134071
+console.log(text.codePointAt(1));   // 57271
+console.log(text.codePointAt(2));   // 97
+
+``` 
+Calling the codePointAt() method on a character is the easiest way to determine whether that character is represented by one or two code points.
+
+```javascript 
+  function is32Bit(c) {
+    return c.codePointAt(0) > 0xFFFF;
+}
+
+console.log(is32Bit("𠮷"));          // true
+console.log(is32Bit("a"));          // false
+``` 
+  - **fromCodePoint()** - retrieve the code point for a character in a string, whereas String.fromCodePoint() produces a single-character string from a given code point. 
+  
+ ```javascript
+console.log(String.fromCodePoint(134071));  // "𠮷"
+``` 
+
+ - **normalize()** - optionally accepts a single string parameter that indicates that one of the following Unicode normalization forms should be applied:
+ • Normalization Form Canonical Composition ("NFC"), the default
+ • Normalization Form Canonical Decomposition ("NFD")
+ • Normalization Form Compatibility Composition ("NFKC")
+ • Normalization Form Compatibility Decomposition ("NFKD")
+
+If you ever work on an internationalized application, you’ll definitely find the normalize() method helpful.
+Keep in mind that when you’re comparing strings, both strings must be normalized to the same form. For example:
+
+
+```javascript
+let normalized = values.map(function(text) {
+    return text.normalize();
+});
+
+normalized.sort(function(first, second) {
+    if (first < second) {
+    return -1;
+    } else if (first === second) {
+        return 0;
+    } else {
+        return 1;
+    }
+});
+      
+``` 
+New methods aren’t the only improvements that ECMAScript 6 provides for working with Unicode strings. ECMAScript 6 also introduces the regular expression u flag and other changes to strings and regular expressions.
+
+###### The Regular Expression u Flag
+
+Regular expressions assume 16-bit code units, where each represents a single character. To address this problem, ECMAScript 6 defines a u flag (which stands for Unicode) for use in regular expressions.
+
+_**The u Flag in Action**_
+When a regular expression has the u flag set, it switches modes to work on characters, not code units. That means the regular expression should no longer treat surrogate pairs as separate characters in strings and should behave as expected. For example, consider this code:
+
+```javascript
+let text = "𠮷";
+
+console.log(text.length);           // 2
+console.log(/^.$/.test(text));      // false
+console.log(/^.$/u.test(text));     // true
+```
+The regular expression /^.$/ matches any input string with a single character. When it’s used without the u flag, this regular expression matches on code units, so the Japanese character (which is represented by two code units) doesn’t match the regular expression. When it’s used with the u flag, the regular expression compares characters instead of code units, so the Japanese character matches.
+
+###### Methods for Identifying Substrings
+
+
+
+
+## 4. BLOCK BINDINGS
+
+
+
+
 
 
 
