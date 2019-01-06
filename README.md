@@ -871,7 +871,7 @@ normalized.sort(function(first, second) {
 ``` 
 New methods aren’t the only improvements that ECMAScript 6 provides for working with Unicode strings. ECMAScript 6 also introduces the regular expression u flag and other changes to strings and regular expressions.
 
-###### The Regular Expression u Flag
+###### The Regular Expression _u Flag_
 
 Regular expressions assume 16-bit code units, where each represents a single character. To address this problem, ECMAScript 6 defines a u flag (which stands for Unicode) for use in regular expressions.
 
@@ -888,9 +888,152 @@ console.log(/^.$/u.test(text));     // true
 The regular expression /^.$/ matches any input string with a single character. When it’s used without the u flag, this regular expression matches on code units, so the Japanese character (which is represented by two code units) doesn’t match the regular expression. When it’s used with the u flag, the regular expression compares characters instead of code units, so the Japanese character matches.
 
 ###### Methods for Identifying Substrings
+Developers have used the indexOf() method to identify strings inside other strings since JavaScript was first introduced.
+ECMAScript 6 includes the following 3 new methods, which are designed to identify strings inside other strings: 
+  - **includes()** - returns true if the given text is found anywhere within the string. It returns false if not.
+  - **startsWith()** - returns true if the given text is found at the beginning of the string. It returns false if not.
+  - **endsWith()** - returns true if the given text is found at the end of the string. It returns false if not.
+Each method accepts two arguments: the text to search for and an optional index from which to start the search. 
+When the second argument is provided, includes() and startsWith() start the match from that index, and endsWith() starts the match from the length of the string minus the second argument; 
+When the second argument is omitted, includes() and startsWith() search from the beginning of the string, and endsWith() starts from the end.
+Here are some examples showing these three methods in action:
+```javascript
+let msg = "Hello world!";
+
+console.log(msg.startsWith("Hello"));      // true
+console.log(msg.endsWith("!"));            // true
+console.log(msg.includes("o"));            // true
+
+console.log(msg.startsWith("o"));          // false
+console.log(msg.endsWith("world!"));       // true
+console.log(msg.includes("x"));            // false
+
+console.log(msg.startsWith("o", 4));       // true
+console.log(msg.endsWith("o", 8));         // true
+console.log(msg.includes("o", 8));         // false
+```
+
+> NOTE: 
+> _The startsWith(), endsWith(), and includes() methods will throw an error if you pass a regular expression instead of a string. In 
+> contrast, indexOf() and lastIndexOf() convert a regular expression argument into a string and then search for that string._
+
+###### The repeat() Method
+ECMAScript 6 also adds a repeat() method to strings, which accepts the number of times to repeat the string as an argument. It returns a new string containing the original string repeated the specified number of times. For example:
+
+```javascript
+console.log("x".repeat(3));        // "xxx"
+console.log("hello".repeat(2));    // "hellohello"
+console.log("abc".repeat(4));      // "abcabcabcabc"
+```
+
+###### Template Literals
+ECMAScript 6’s answer to the following features that JavaScript lacked in ECMAScript 5 and in earlier versions:
+ - Multiline strings A formal concept of multiline strings;
+ - Basic string formatting The ability to substitute parts of the string for values contained in variables;
+ - HTML escaping The ability to transform a string so it is safe to insert into HTML;
+
+At their simplest, template literals act like regular strings delimited by backticks instead of double or single quotes. For example, consider the following:
+
+```javascript
+let message = `\`Hello\` world!`;
+
+console.log(message);             // "`Hello` world!"
+console.log(typeof message);      // "string"
+console.log(message.length);      // 14
+```
+
+Also ECMAScript 6’s template literals make **multiline strings** easy because there’s no special syntax. Just include a newline where you want, and it appears in the result, like so:
 
 
+```javascript
+//In this code, all whitespace before the second line of the template literal is considered part of the string.
+let message = `Multiline
+               string`;
 
+console.log(message);           // "Multiline
+                                //                  string"
+console.log(message.length);    // 31
+```
+The real difference between template literals and normal versions of JavaScript strings are **Substitutions**. 
+**Substitutions** allow you to embed any valid JavaScript expression inside a template literal and output the result as part of the string. They are delimited by an opening **${ and a closing }** that can have any JavaScript expression inside. The simplest substitutions let you embed local variables directly into a resulting string, like this:
+
+```javascript
+let name = "Nicholas",
+    message = `Hello, ${name}.`;
+    
+console.log(message);       // "Hello, Nicholas."
+```
+Because all substitutions are JavaScript expressions, you can substitute more than just simple variable names. You can easily embed calculations, function calls, and more. For example:
+
+```javascript
+let count = 10,
+    price = 0.25,
+    message = `${count} items cost $${(count * price).toFixed(2)}.`;
+
+console.log(message);       // "10 items cost $2.50."
+```
+
+Also you can place a template literal inside another template literal, as in this example:
+
+```javascript
+let name = "John Doe",
+    message = `Hello, ${
+        `my name is ${ name }`
+    }.`;
+
+console.log(message);        // "Hello, my name is John Doe.""
+```
+
+> NOTE:
+> A template literal can access any variable accessible in the scope in which it is defined. Attempting to use an undeclared variable in > a template literal throws an error in strict and non-strict modes.
+
+###### TAGGED TEMPLATES
+
+The real power of template literals is represented by <ins>**TAGGED TEMPLATES**</ins>.
+Tagged templates - allow you to parse template literals with a function. The first argument of a tag function contains an array of string values. The remaining arguments are related to the expressions. In the end, your function can return your manipulated string (or it can return something completely different as described in the next example). The name of the function used for the tag can be whatever you want.
+
+```javascript
+var person = 'Mike';
+var age = 28;
+
+function myTag(strings, personExp, ageExp) {
+  var str0 = strings[0]; // "That "
+  var str1 = strings[1]; // " is a "
+
+  // There is technically a string after
+  // the final expression (in our example),
+  // but it is empty (""), so disregard.
+  // var str2 = strings[2];
+
+  var ageStr;
+  if (ageExp > 99){
+    ageStr = 'centenarian';
+  } else {
+    ageStr = 'youngster';
+  }
+
+  // We can even return a string built using a template literal
+  return `${str0}${personExp}${str1}${ageStr}`;
+}
+
+var output = myTag`That ${ person } is a ${ age }`;
+
+console.log(output);
+// That Mike is a youngster
+```
+
+###### Raw strings
+ - The special raw property, available on the first argument to the tag function, allows you to access the raw strings as they were entered, without processing escape sequences: 
+ 
+ ```javascript
+function tag(strings) {
+  console.log(strings.raw[0]);
+}
+
+tag`string text line 1 \n string text line 2`;
+// logs "string text line 1 \n string text line 2" ,
+// including the two characters '\' and 'n'
+```
 
 ## 4. BLOCK BINDINGS
 
