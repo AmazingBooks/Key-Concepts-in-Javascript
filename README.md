@@ -1035,14 +1035,126 @@ tag`string text line 1 \n string text line 2`;
 // including the two characters '\' and 'n'
 ```
 
-## 4. BLOCK BINDINGS
+## 4. FUNCTIONS
+ECMAScript 6 functions make a big leap forward, taking into account years of complaints and requests from JavaScript developers. 
 
+##### What are the improvements for functions in ES6?
+ **1. Default Parameter Values in ECMAScript 6**
+ECMAScript 6 makes it easier to provide default values for parameters by supplying initializations that are used when the parameter isn’t formally passed. For example:
 
+```javascript
 
+// This function expects only the first parameter to always be passed. 
+// The other two parameters have default values, which makes the body of the function much smaller because you don’t need to add any code to check for a missing value.
+function makeRequest(url, timeout = 2000, callback = function() {}) {
 
+    // the rest of the function
+}
+// When makeRequest() is called with all three parameters, the defaults are not used. For example:
+ 
+ // uses default timeout and callback
+  makeRequest("/foo");
 
+  // uses default callback
+  makeRequest("/foo", 500);
 
+  // doesn't use defaults
+  makeRequest("/foo", 500, function(body) {
+      doSomething(body);
+  });
 
+```
+Perhaps the most interesting feature of default parameter values is that the default value is not resticted to be a primitive value. You can, for example, execute a function to retrieve the default parameter value, like this:
 
+```javascript
+function getValue() {
+    return 5;
+}
 
+function add(first, second = getValue()) {
+    return first + second;
+}
 
+console.log(add(1, 1));     // 2
+console.log(add(1));        // 6
+
+```
+> Note: Be careful when using function calls as default parameter values. If you forget the parentheses, such as second = getValue in  > this example, you are passing a reference to the function rather than the result of the function call.
+
+This behavior introduces another useful capability. You can use a previous parameter as the default for a later parameter. Here’s an example:
+
+```javascript
+
+function add(first, second = first) {
+    return first + second;
+}
+
+console.log(add(1, 1));              // 2
+console.log(add(1));                 // 2
+
+```
+
+**2. Rest Parameters**
+Rest parameters were designed to replace arguments in JavaScript. Originally, ECMAScript 4 eliminated arguments and added rest parameters to allow an unlimited number of arguments to be passed to functions. ECMAScript 4 was never standardized, but this idea was retained and reintroduced in ECMAScript 6, despite arguments not being removed from the language.
+A rest parameter is indicated by three dots (...) preceding a named parameter. That named parameter becomes an Array containing the rest of the parameters passed to the function, which is where the name __rest parameters__ originates. For example:
+
+```javascript
+
+function pick(object, ...keys) {
+    let result = Object.create(null);
+for (let i = 0, len = keys.length; i < len; i++) {
+        result[keys[i]] = object[keys[i]];
+    }
+
+    return result;
+}
+
+```
+Code explanation: 
+ - In the code above, keys is a rest parameter that contains all parameters passed after object (unlike arguments, which contains all parameters including the first one). That means you can iterate over keys from beginning to end without worry. As a bonus, you can tell by looking at the function that it’s capable of handling any number of parameters.
+
+> Rest parameters have two restrictions :
+>   1.  The first restriction is that there can be only one rest parameter, and the rest parameter must be last. 
+      For example, this code won’t work:
+  ```javascript
+          // Syntax error: Can't have a named parameter after rest parameters
+          function pick(object, ...keys, last) {
+              let result = Object.create(null);
+
+              for (let i = 0, len = keys.length; i < len; i++) {
+                  result[keys[i]] = object[keys[i]];
+              }
+
+              return result;
+          }
+   ```
+   
+ >   2.  The second restriction is that rest parameters cannot be used in an object literal setter.
+     For example, this code won’t work:
+  ```javascript
+      let object = {
+      
+        // Syntax error: Can't use rest param in setter
+        set name(...value) {
+            // do something
+        }
+    };
+   ```
+ 
+ 
+**2. Spread Operator**
+
+Spread operator  - allows you to specify an array that should be split and passed in as separate arguments to a function. 
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
