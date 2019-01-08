@@ -1144,17 +1144,160 @@ Code explanation:
  
 **2. Spread Operator**
 
-Spread operator  - allows you to specify an array that should be split and passed in as separate arguments to a function. 
+Spread operator  - allows an iterable such as an array expression or string to be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected, or an object expression to be expanded in places where zero or more key-value pairs (for object literals) are expected.
 
+```javascript
+function sum(x, y, z) {
+  return x + y + z;
+}
+
+const numbers = [1, 2, 3];
+
+console.log(sum(...numbers));
+// expected output: 6
+
+console.log(sum.apply(null, numbers));
+// expected output: 6
+```
+
+**Syntax:*
+
+For function calls:
+`
+myFunction(...iterableObj);
+`
+
+For array literals or strings:
+`
+[...iterableObj, '4', 'five', 6];
+`
+
+For object literals (new in ECMAScript 2018):
+`
+let objClone = { ...obj };
+ myFunction(...iterableObj);
+`
+
+**Difference between Rest and Spread?**
+
+When using **Rest** arguments, you are collapsing all remaining arguments of a function into one array
+**Rest**: quite literally the **rest** of the data. It will always collect the data in an array, so:
+
+```javascript   
+    function sum( first, ...others ) {
+        for ( var i = 0; i < others.length; i++ )
+            first += others[i];
+        return first;
+    }
+    console.log(sum(1,2,3,4))// sum(1, 2, 3, 4) == 10;
+```   
+
+When using **Spread**, you are expanding a single variable into more.
+**Spread**: literally spread the data over the input. Will be an iterable in some form (array, object, string etc…) so:
+
+```javascript
+    var abc = ['a', 'b', 'c'];
+    var def = ['d', 'e', 'f'];
+    var alpha = [ ...abc, ...def ];
+    console.log(alpha)// alpha == ['a', 'b', 'c', 'd', 'e', 'f'];
+      ]
+      // [1, 2, 3, 4, 5, 6]
+
+      const toSpread = { key: 'value' }
+      const objectSpread = {
+         ...toSpread,
+        secondKey: 'secondValue'
+      }
+```   
+
+**3. Block-Level Functions**
+
+Block-level functions are similar to let function expressions in that the function definition is removed once execution flows out of the block in which it’s defined. The key difference is that **block-level functions are hoisted to the top of the containing block**. 
+
+_Function expressions that use let are not hoisted, as this example illustrates_:
+
+```javascript
+  "use strict";
+
+  if (true) {
+
+      console.log(typeof doSomething);      // throws an error
+
+      let doSomething = function () {
+          // empty
+      }
+
+      doSomething();
+  }
+
+  console.log(typeof doSomething);
+
+``` 
+
+
+_ECMAScript 6 also allows block-level functions in non-strict mode, but the behavior is slightly different. Instead of hoisting these declarations to the top of the block, they are hoisted all the way to the containing function or global environment_:
+
+```javascript
+    // ECMAScript 6 behavior
+    if (true) {
+
+        console.log(typeof doSomething);      // "function"
+
+        function doSomething() {
+            // empty
+      }
+
+          doSomething();
+      }
+
+      console.log(typeof doSomething);          // "function"
+``` 
+Also ECMAScript 6 also introduced a completely new way to declare functions via Arrow Functions.
+
+**4. Arrow Functions**
+
+One of the most interesting new parts of ECMAScript 6 is the arrow function. Arrow functions are, as the name suggests, functions defined with a new syntax that uses an arrow (=>). But arrow functions behave differently than traditional JavaScript functions in a number of important ways:
+
+   1. **No** keywords _this, super, arguments, and new.target_ bindings. The values of this, super, arguments, and new.target inside the function are defined by the closest containing non-arrow function.
    
+   2.  Cannot be called with **new** because Arrow functions do not have a [[Construct]] method and therefore cannot be used as constructors. Arrow functions throw an error when used with **new**.
    
+   3. **No Prototype** because you can’t use new on an arrow function, there’s no need for a prototype. The prototype property of an arrow function doesn’t exist.
    
+   4. **Can’t change _this_** - The value of _this_ inside the function can’t be changed. It remains the same throughout the entire life cycle of the function.
    
+   5. **No Arguments object** because arrow functions have no arguments binding, you must rely on named and rest parameters to access function arguments.
    
+   6. **No duplicate named Parameters** - Arrow functions cannot have duplicate named parameters in strict or non-strict mode, as opposed to non-arrow functions, which cannot have duplicate named parameters only in strict mode.
    
-   
-   
-   
+There are a few reasons for these differences. First and foremost, _this_ binding is a common source of error in JavaScript. It’s very easy to lose track of the _this_ value inside a function, which can result in unintended program behavior, and arrow functions eliminate this confusion. Second, by limiting arrow functions to simply executing code with a single _this_ value, JavaScript engines can more easily optimize these operations. By doing so, JavaScript engines are better able to optimize arrow function execution.
+
+> NOTE: 
+> Arrow functions also have a name property that follows the same rule as other functions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
    
    
