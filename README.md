@@ -6,7 +6,8 @@ Below is a resume for the most important must known features in ES6 with code ex
   1. ROMISES AND ASYNCHRONOUS PROGRAMMING
   2. PROXIES AND THE REFLECTION API
   3. STRINGS AND REGULAR EXPRESSIONS
-  4. BLOCK BINDINGS
+  4. FUNCTIONS
+  5. EXPANDED OBJECT FUNCTIONALITY
 
 ## 1. PROMISES and ASYNCHRONOUS PROGRAMMING
 ### What is a PROMISE? 
@@ -1275,29 +1276,197 @@ There are a few reasons for these differences. First and foremost, _this_ bindin
 > NOTE: 
 > Arrow functions also have a name property that follows the same rule as other functions.
 
+##### Arrow Function Syntax Variatons
+
+The syntax for arrow functions comes in many flavors depending on what you’re trying to accomplish. All variations begin with function arguments, followed by the arrow, followed by the body of the function. 
 
 
+**1 - No Arguments**
+ - If there are no arguments to the function, you must include an empty set of parentheses in the declaration, as follows:
+
+```javascript
+
+    let getName = () => "Nicholas";
+
+    // effectively equivalent to:
+
+    let getName = function() {
+        return "Nicholas";
+    };
+
+```
 
 
+**2 - Passing one Argument**
+   - The arguments and the body can take different forms depending on usage. 
+   For example, the following arrow function takes a single argument and simply returns it:
+
+```javascript
+
+    let reflect = value => value;
+
+    // effectively equivalent to:
+
+    let reflect = function(value) {
+        return value  ;
+    };
 
 
+```
+
+**3 - Passing Multiple Arguments** 
+ - If you are passing in more than one argument, you must include parentheses around those arguments, like this:
+in more than one argument, you must include parentheses around those arguments, like this:
 
 
+```javascript
+
+    let sum = (num1, num2) => num1 + num2;
+
+    // effectively equivalent to:
+
+    let sum = function(num1, num2) {
+        return num1 + num2;
+    };
 
 
+```
+
+**4 - Immediately Invoked Function Expressions using Arrow Functions**
+
+One popular use of functions in JavaScript is creating immediately invoked function expressions (IIFEs). 
+IIFEs allow you to define an anonymous function and call it immediately without saving a reference. 
+This pattern comes in handy when you want to create a scope that is shielded from the rest of a program. For example:
 
 
+```javascript
+
+let person = ((name) => {
+
+    return {
+        getName: function() {
+            return name;
+        }
+    };
+
+})("John");
+
+console.log(person.getName());      // "John"
 
 
+```
+##### No _this_ Binding
+
+Arrow functions have no this binding, which means the value of this inside an arrow function can only be determined by looking up the scope chain. If the arrow function is contained within a non-arrow function, this will be the same as the containing function; otherwise, this is undefined. Here’s one way you could write this code using an arrow function:
+
+```javascript
+
+    let PageHandler = {
+
+        id: "123456",
+
+        init: function() {
+            document.addEventListener("click",
+                    event => this.doSomething(event.type), false);
+        },
+
+        doSomething: function(type) {
+            console.log("Handling " + type  + " for " + this.id);
+             }
+};
+```
 
 
+##### Arrow Functions and Arrays
+The concise syntax for arrow functions makes them ideal for use with array processing, too. The array methods that accept callback functions, such as **sort(), map(), and reduce()**, can all benefit from simpler arrow function syntax, which changes seemingly complex processes into simpler code.
 
+```javascript
 
+   let result = values.sort((a, b) => a - b);
+    
+```  
 
-
-
-
-
+##### Identifying Arrow Functions
    
+Despite their different syntax, arrow functions are still functions and are identified as such. Consider the following code:
+
+```javascript
+
+    var comparator = (a, b) => a - b;
+    //The console.log() output reveals that both typeof and instanceof 
+    // behave the same with arrow functions as they do with other functions.
+    console.log(typeof comparator);                 // "function"
+    console.log(comparator instanceof Function);    // true
+
+```  
+
+Also like other functions, you can still use call(), apply(), and bind() on arrow functions, although the this binding of the function will not be affected. Here are some examples:
+
+```javascript   
+   var sum = (num1, num2) => num1 + num2;
+
+    console.log(sum.call(null, 1, 2));     // 3
+    console.log(sum.apply(null, [1, 2]));  // 3
+
+    var boundSum = sum.bind(null, 1, 2);
+
+    console.log(boundSum());               // 3
+
+```  
+
+#### Tail Call Optimization   
+
+**What is a Tail Call?** - A tail call is when a function is called as the last statement in another function.
+Perhaps the most interesting change to functions in ECMAScript 6 is an engine optimization that changes the tail call system: 
+
+**How Tail Calls Are Different in ECMAScript 6 ?** - ECMAScript 6 reduces the size of the call stack for certain tail calls in strict mode (non-strict mode tail calls are left untouched). With this optimization, instead of creating a new stack frame for a tail call, the current stack frame is cleared and reused as long as the following conditions are met:
+
+   - The tail call does not require access to variables in the current stack frame (meaning the function is not a closure).
+   - The function making the tail call has no further work to do after the tail call returns.
+   - The result of the tail call is returned as the function value.
+
+```javascript      
+  "use strict";
+// This function makes a tail call to doSomethingElse(), returns the result immediately, and 
+//      doesn’t access any variables in the local scope. 
+   doSomething() {
+        // optimized
+        return doSomethingElse();
+    }
+```
+In practice, tail call optimization happens behind the scenes, so you don’t need to think about it unless you’re trying to optimize a function. The primary use case for tail call optimization is in recursive functions, because that is where the optimization has the greatest effect. Consider this function, which computes factorials:
+
+```javascript      
+
+    function factorial(n) {
+        if (n <= 1) {
+            return 1;
+        } else {
+
+            // not optimized - must multiply after returning
+            return n * factorial(n - 1);
+        }
+    }
+
+```
+
+Think about tail call optimization whenever you’re writing a recursive function, because it can provide a significant performance improvement, especially when applied in a computationally expensive function.
+
+**Summary for FUNCTIONS:**
+   1.  Functions haven’t undergone a huge change in ECMAScript 6 but rather a series of incremental changes that make them easier to work with.
    
+   2. Default function parameters allow you to easily specify what value to use when a particular argument isn’t passed. Prior to ECMAScript 6, this would require some extra code inside the function to check for the presence of arguments and assign a different value.
    
+   3. Rest parameters allow you to specify an array into which all remaining parameters should be placed. Using a real array and letting you indicate which parameters to include makes rest parameters a much more flexible solution than arguments.
+   
+   4. The spread operator is a companion to rest parameters, allowing you to deconstruct an array into separate parameters when calling a function.
+   
+   5. The biggest change to functions in ECMAScript 6 was the addition of arrow functions. Arrow functions are designed to be used in place of anonymous function expressions. Arrow functions have a more concise syntax, lexical this binding, and no arguments object. Additionally, arrow functions can’t change their this binding and therefore can’t be used as constructors.
+  
+  6. Tail call optimization allows some function calls to be optimized to maintain a smaller call stack, use less memory, and prevent stack overflow errors. This optimization is applied by the engine automatically when it is safe to do so; however, you might decide to rewrite recursive functions to take advantage of this optimization.
+
+
+## 5. EXPANDED OBJECT FUNCTIONALITY
+
+
+
