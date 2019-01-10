@@ -1467,6 +1467,74 @@ Think about tail call optimization whenever you’re writing a recursive functio
 
 
 ## 5. EXPANDED OBJECT FUNCTIONALITY
+ECMAScript 6 focuses heavily on making objects more useful, which makes sense because nearly every value in JavaScript is some type of Object. The number of Objects developers use in an average JavaScript program continues to increase as the complexity of JavaScript applications increases. With more objects in a program, it has become necessary to use them more effectively. ECMAScript 6 improves the use of objects in a number of ways, from simple syntax extensions to options for manipulating and interacting with them, and this chapter covers those improvements in detail.
+
+The ECMAScript 6 specification has clear definitions for each object category. 
+It’s essential to understand this terminology to grasp the language as a whole. 
+The object categories are:
+
+1. **Ordinary objects** - Have all the default internal behaviors for objects in JavaScript.
+2. **Exotic Objects** - Have internal behavior that differs from the default in some way.
+3. **Standard Objects** - Defined by ECMAScript 6, such as Array, Date, and so on. Standard objects can be ordinary or exotic.
+4. **Built-in Objects** - Present in a JavaScript execution environment when a script begins to execute. All standard objects are built-in objects.
+
+The **Object literal** is one of the most popular patterns in JavaScript. JSON is built on its syntax, and it’s in nearly every JavaScript file on the Internet. The object literal popularity is due to its succinct syntax for creating objects that would otherwise take several lines of code to create. Fortunately for developers, ECMAScript 6 makes object literals more powerful and even more succinct by extending the syntax in several ways.
+
+```javascript
+
+function createPerson(name, age) {
+    return {
+        name,
+        age
+    };
+}
+
+```
+ECMAScript 6 also improves the syntax for assigning methods to object literals and the syntax is made more concise by eliminating the colon and the function keyword:
+
+```javascript
+
+let person = {
+    name: "John",
+    sayName() {
+        console.log(this.name);
+    }
+};
+```
+In ECMAScript 6, computed property names are part of the object literal syntax, and they use the same square bracket notation that has been used to reference computed property names in object instances. For example:
+
+```javascript
+    let lastName = "last name";
+
+    let person = {
+        "first name": "John",
+    //The square brackets inside the object literal indicate that the property name is computed, 
+   //     so its contents are evaluated as a string.
+        [lastName]: "Doe"
+    };
+
+    console.log(person["first name"]);      // "John"
+    console.log(person[lastName]);          // "Doe"
+```
+
+Since the square brackets inside the object literal indicates that the property name is computed, you can also include expressions, such as the following:
 
 
+
+```javascript
+    var suffix = " name";
+
+    var person = {
+    
+    //These properties evaluate to "first name" and "last name", and you can use them to reference the properties later. 
+    // Anything you would put inside square brackets while using bracket notation
+    //          on object instances will also work for computed property names inside object literals.
+        ["first" + suffix]: "John",
+        ["last" + suffix]: "Doe"
+    };
+    
+    console.log(person["first name"]);      // "John"
+    console.log(person["last name"]);       // "Doe"
+      
+```
 
