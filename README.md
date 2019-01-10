@@ -1526,7 +1526,8 @@ Since the square brackets inside the object literal indicates that the property 
 
     var person = {
     
-    //These properties evaluate to "first name" and "last name", and you can use them to reference the properties later. 
+    //These properties evaluate to "first name" and "last name", and you can 
+    //      use them to reference the properties later. 
     // Anything you would put inside square brackets while using bracket notation
     //          on object instances will also work for computed property names inside object literals.
         ["first" + suffix]: "John",
