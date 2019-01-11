@@ -1539,3 +1539,316 @@ Since the square brackets inside the object literal indicates that the property 
       
 ```
 
+##### New Object Methods 
+ECMAScript 6 introduces a couple of new methods on the Object global that are designed to make certain tasks easier.
+
+> (1) - **Object.is() Method**
+
+When you want to compare two values in JavaScript, you’re probably used to using either the equals operator (==) or the identically equals operator (===). But even the identically equals operator isn’t entirely accurate. For example, NaN === NaN returns false, which necessitates using isNaN() to detect NaN properly.
+
+Thus to remedy the remaining inaccuracies of the identically equals operator, ECMAScript 6 introduces the **Object.is() method**. 
+This method accepts two arguments and returns true if the values are equivalent. Two values are considered equivalent when they’re the same type and have the same value. Here are some examples:
+
+```javascript
+
+  console.log(+0 == -0);              // true
+  console.log(+0 === -0);             // true
+  console.log(Object.is(+0, -0));     // false
+
+  console.log(NaN == NaN);            // false
+  console.log(NaN === NaN);           // false
+  console.log(Object.is(NaN, NaN));   // true
+  
+  console.log(5 == 5);                // true
+  console.log(5 == "5");              // true
+  console.log(5 === 5);               // true
+  console.log(5 === "5");             // false
+  console.log(Object.is(5, 5));       // true
+  console.log(Object.is(5, "5"));     // false
+
+```
+> NOTE:
+> _In many cases, Object.is() works the same as the === operator. The only differences are that +0 and -0 are considered not equivalent, and NaN is considered equivalent to NaN._
+
+Choose whether to use Object.is() or === based on how those special cases affect your code.
+
+
+> (2) - **Object.assign() Method**
+
+Mixins are among the most popular patterns for object composition in JavaScript. In a mixin, one object receives properties and methods from another object. Many JavaScript libraries have a mixin method similar to this:
+
+```javascript
+
+//The mixin() function iterates over the own properties of supplier and copies them onto receiver. 
+//This allows the receiver to gain new properties without inheritance:
+  function mixin(receiver, supplier) {
+      Object.keys(supplier).forEach(function(key) {
+          receiver[key] = supplier[key];
+           });
+
+      return receiver;
+  }
+
+```
+This mixin pattern became popular enough that ECMAScript 6 added the Object.assign() method, which behaves the same way, accepting a receiver and any number of suppliers and then returning the receiver. The name change from mixin() to assign() which reflects the actual operation that occurs. 
+
+```javascript
+
+    function EventTarget() { /*...*/ }
+    EventTarget.prototype = {
+        constructor: EventTarget,
+        emit: function() { /*...*/ },
+        on: function() { /*...*/ }
+    }
+
+    var myObject = {}
+    Object.assign(myObject, EventTarget.prototype);
+
+    myObject.emit("somethingChanged");
+
+```
+
+> NOTE:
+> _The Object.assign() method isn’t a significant addition to ECMAScript 6, but it does formalize a common function found in many JavaScript libraries._
+> _Keep in mind that Object.assign() doesn’t create accessor properties on the receiver when a supplier has accessor properties. Because Object.assign() uses the assignment operator, an accessor property on a supplier will become a data property on the receiver._
+
+For example:
+
+```javascript
+
+  ar receiver = {},
+      supplier = {
+          get name() {
+              return "file.js"
+          }
+      };
+
+  Object.assign(receiver, supplier);
+
+  var descriptor = Object.getOwnPropertyDescriptor(receiver, "name");
+
+  console.log(descriptor.value);      // "file.js"
+  console.log(descriptor.get);        // undefined
+
+```
+
+##### Duplicate Object Literal Properties
+
+In ECMAScript 5 strict mode introduced a check for duplicate object literal properties that would throw an error if a duplicate was found. For example, this code was problematic:
+
+
+```javascript
+
+  "use strict";
+
+  var person = {
+      name: "Nicholas",
+      //When running in ECMAScript 5 strict mode, the second name property causes a syntax error. 
+      name: "Greg"        // syntax error in ES5 strict mode
+  };
+  
+```
+
+But in ECMAScript 6, the duplicate property check was removed. Strict and non-strict mode code no longer check for duplicate properties. Instead, the last property of the given name becomes the property’s actual value, as shown here:
+
+```javascript
+
+    "use strict";
+
+    var person = {
+        name: "Nicholas",
+        name: "Greg"        // no error in ES6 strict mode};
+
+    //In this example, the value of person.name is "Greg" because 
+    //   that’s the last value assigned to the property.
+    console.log(person.name);       // "Greg"
+
+```
+
+
+##### Own Property Enumeration Order
+
+ECMAScript 5 didn’t define the enumeration order of object properties. However, ECMAScript 6 strictly defines the order in which own properties must be returned when they’re enumerated. This affects how properties are returned using Object.getOwnPropertyNames() and Reflect.ownKeys. It also affects the order in which properties are processed by Object.assign().
+
+The basic order for own property enumeration is:
+
+  (1) - All numeric keys in ascending order;
+  (2) - All string keys in the order in which they were added to the object; 
+  (3) - All symbol keys in the order in which they were added to the object;
+  
+Here’s an example:
+
+```javascript
+
+    var obj = {
+        a: 1,
+        0: 1,
+        c: 1,
+        2: 1,
+        b: 1,
+        1: 1
+    };
+
+    obj.d = 1;
+
+    console.log(Object.getOwnPropertyNames(obj).join(""));     // "012acbd"
+
+```
+> NOTE:
+> _The for-in loop still has an unspecified enumeration order because not all JavaScript engines implement it the same way. The Object.keys() method and JSON.stringify() are both specified to use the same (unspecified) enumeration order as for-in._
+
+
+Although enumeration order is a subtle change to how JavaScript works, it’s not uncommon to find programs that rely on a specific enumeration order to work correctly. ECMAScript 6, by defining the enumeration order, ensures that JavaScript code relying on enumeration will work correctly regardless of where it is executed.
+
+
+#### Enhancements for Prototypes
+
+Prototypes are the foundation of inheritance in JavaScript, and ECMAScript 6 continues to make prototypes more useful. Early versions of JavaScript severely limited what you could do with prototypes. However, as the language matured and developers became more familiar with how prototypes work, it became clear that developers wanted more control over prototypes and easier ways to work with them. As a result, ECMAScript 6 introduced some improvements to prototypes.
+
+> (1) - **Object.setPrototypeOf()**
+
+ECMAScript 6 adds the Object.setPrototypeOf() method, which allows you to change the prototype of any given object. 
+
+```javascript
+
+    let person = {
+        getGreeting() {
+        return "Hello";
+        }
+    };
+
+    let dog = {
+        getGreeting() {
+            return "Woof";
+        }
+    };
+
+    // prototype is person
+    let friend = Object.create(person);
+    console.log(friend.getGreeting());                      // "Hello"
+    console.log(Object.getPrototypeOf(friend) === person);  // true
+
+    // set prototype to dog
+    Object.setPrototypeOf(friend, dog);
+    console.log(friend.getGreeting());                      // "Woof"
+    console.log(Object.getPrototypeOf(friend) === dog);     // true
+
+
+```
+
+
+> (2) - **Super references**
+
+Another improvement is the introduction of super references, which make accessing functionality on an object’s prototype easier. 
+At its simplest, super is a pointer to the current object’s prototype, effectively the Object.getPrototypeOf(this) value. Knowing that, you can simplify the getGreeting() method as follows:
+
+```javascript
+
+  let friend = {
+      getGreeting() {
+      
+          // Object.getPrototypeOf(this).getGreeting.call(this)
+          return super.getGreeting() + ", hi!";
+      }
+  };
+  
+```
+
+Attempting to use super outside of concise methods results in a syntax error, as in this example:
+
+```javascript
+
+let friend = {
+    //This example uses a named property with a function, and the call to super.getGreeting()
+    //     results in a syntax error because super is invalid in this context.
+    getGreeting: function() {
+        // syntax error
+        return super.getGreeting() + ", hi!";
+    }
+};
+
+```
+The super reference is really helpful when you have multiple levels of inheritance, because in that case, Object.getPrototypeOf() no longer works in all circumstances. For example:
+
+```javascript
+
+  let person = {
+      getGreeting() {
+          return "Hello";
+      }
+  };
+
+  // prototype is person
+    let friend = {
+    getGreeting() {
+          return Object.getPrototypeOf(this).getGreeting.call(this) + ", hi!";
+      }
+    };
+    Object.setPrototypeOf(friend, person);
+
+
+    // prototype is friend
+    let relative = Object.create(friend);
+
+    console.log(person.getGreeting());                  // "Hello"
+    console.log(friend.getGreeting());                  // "Hello, hi!"
+    console.log(relative.getGreeting());                // error!
+
+  ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+      > (3) - **Object.assign() Method**
+
+      Mixins are among the most popular patterns for object composition in JavaScript. In a mixin, one object receives properties and methods from another object. Many JavaScript libraries have a mixin method similar to this:
+
+      ```javascript
+
+
+      ```
+
+
+
+      > NOTE:
+      > _res_
+
+-->
+
+
+
+
+
+
+
+
+
+
+
