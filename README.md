@@ -8,6 +8,7 @@ Below is a resume for the most important must known features in ES6 with code ex
   3. STRINGS AND REGULAR EXPRESSIONS
   4. FUNCTIONS
   5. EXPANDED OBJECT FUNCTIONALITY
+  6. DESTRUCTURING FOR EASIER DATA ACCESS
 
 ## 1. PROMISES and ASYNCHRONOUS PROGRAMMING
 ### What is a PROMISE? 
@@ -1796,24 +1797,138 @@ The super reference is really helpful when you have multiple levels of inheritan
 
   ```
 
+#### SUMMARY
+
+      -  Objects are the center of JavaScript programming, and ECMAScript 6 makes some helpful changes to objects that make them easier to work with and more flexible. ECMAScript 6 makes several changes to object literals. Shorthand property definitions make assigning properties with the same names as in-scope variables simpler. Computed property names allow you to specify non-literal values as property names, which you’ve been able to do in other areas of the language. Shorthand methods let you type far fewer characters to define methods on object literals by completely omitting the colon and function keyword. ECMAScript 6 loosens the strict mode check for duplicate object literal property names as well, meaning two properties with the same name can be in a single object literal without throwing an error.
+      -  The Object.assign() method makes it easier to change multiple properties on a single object at once and is very useful when you use the mixin pattern. The Object.is() method performs strict equality on any value, effectively becoming a safer version of === when you’re working with special JavaScript values.
+      - ECMAScript 6 clearly defines enumeration order for own properties. Numeric keys always come first in ascending order followed by string keys in insertion order and symbol keys in insertion order.
+      - It’s now possible to modify an object’s prototype after it’s been created thanks to ECMAScript 6’s Object.setPrototypeOf() method.
+      - In addition, you can use the super keyword to call methods on an object’s prototype. The this binding inside a method invoked using super is set up to automatically work with the current value of this.
 
 
+## 6. DESTRUCTURING FOR EASIER DATA ACCESS
+
+**Why Is Destructuring Useful?** - Because it prevents the situation of code duplication, for example when trying to fetch information from objects and arrays. Here is an example: 
+
+```javascript
+
+//Example of fetching information in ES5 from an Object
+    let options = {
+        repeat: true,
+        save: false
+    };
+
+    // extract data from the object
+    let repeat = options.repeat,
+        save = options.save;
+
+```
+
+ECMASCRIPT 6 is solving this problem of data fetching from different object by adding **Destructuring** for Objects and Arrays.
+When you break down a data structure into smaller parts, getting the information you need from it becomes much easier.
+
+**Object Destructuring**
+Object destructuring syntax uses an object literal on the left side of an assignment operation. For example:  
+
+```javascript
+      let node = {
+          type: "Identifier",
+          name: "foo"
+      };
+
+      //The identifiers type and name are both declarations of local variables
+      //   and the properties to read the value from on the node object.
+      let { type, name } = node;
+
+      console.log(type);      // "Identifier"
+      console.log(name);      // "foo"
+
+```
 
 
+>  NOTES:
+
+>  (1) DON’T FORGET THE INITIALIZER - When you’re using destructuring to declare variables using var, let, or const, you must supply an initializer (the value after the equal sign). 
+
+The following lines of code will all throw syntax errors due to a missing initializer:
+
+```javascript
+
+    // syntax error!
+    var { type, name };
+
+    // syntax error!
+    let { type, name };
+          
+    // syntax error!
+    const { type, name };
+
+```
 
 
+>  (2) However, it’s also possible to use destructuring in assignments and its a MUST to put parentheses around a destructuring assignment statement. The reason is that an opening curly brace is expected to be a block statement, and a block statement cannot appear on the left side of an assignment. The parentheses signal that the next curly brace is not a block statement and should be interpreted as an expression, allowing the assignment to complete. 
+
+For instance, you might decide to change the values of variables after they’re defined, as follows:  
+
+```javascript
+
+      let node = {
+          type: "Identifier",
+          name: "foo"
+      },
+     
+      //declaring variables
+      type = "Literal",
+      name = 5;
+
+      // assign different values to the variables type and name using destructuring
+      ({ type, name } = node);
+
+      console.log(type);      // "Identifier"
+      console.log(name);      // "foo"
+
+```
+
+>  (3) -  An error is thrown when the right side of the destructuring assignment expression (the expression after =) evaluates to null or undefined. This happens because any attempt to read a property of null or undefined results in a runtime error.
+
+>  (4) - When you use a destructuring assignment statement and you specify a local variable with a property name that doesn’t exist on the object, that local variable is assigned a value of undefined. For example:
 
 
+```javascript
+
+    let node = {
+        type: "Identifier",
+        name: "foo"
+    };
+
+    let { type, name, value } = node;
+
+    console.log(type);      // "Identifier"
+    console.log(name);      // "foo"
+    console.log(value);     // undefined
+
+```
 
 
+>  (5) - You can optionally define a default value to use when a specified property doesn’t exist. To do so, insert an equal sign (=) after the property name and specify the default value, like this:
 
+```javascript
 
+    let node = {
+        type: "Identifier",
+        name: "foo"
+    };
 
+    let { type, name, value = true } = node;
 
+    console.log(type);      // "Identifier"
+    console.log(name);      // "foo"
+    // the variable value is given true as a default value. 
+    // The default value is only used if the property is missing on node or has a value of undefined. 
+    //     Because no node.value property exists, the variable value uses the default value. 
+    console.log(value);     // true
 
-
-
-
+```
 
 
 
@@ -1830,10 +1945,10 @@ The super reference is really helpful when you have multiple levels of inheritan
 
       Mixins are among the most popular patterns for object composition in JavaScript. In a mixin, one object receives properties and methods from another object. Many JavaScript libraries have a mixin method similar to this:
 
-      ```javascript
+```javascript
 
 
-      ```
+```
 
 
 
