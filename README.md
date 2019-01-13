@@ -1798,12 +1798,11 @@ The super reference is really helpful when you have multiple levels of inheritan
   ```
 
 #### SUMMARY
-
-      -  Objects are the center of JavaScript programming, and ECMAScript 6 makes some helpful changes to objects that make them easier to work with and more flexible. ECMAScript 6 makes several changes to object literals. Shorthand property definitions make assigning properties with the same names as in-scope variables simpler. Computed property names allow you to specify non-literal values as property names, which you’ve been able to do in other areas of the language. Shorthand methods let you type far fewer characters to define methods on object literals by completely omitting the colon and function keyword. ECMAScript 6 loosens the strict mode check for duplicate object literal property names as well, meaning two properties with the same name can be in a single object literal without throwing an error.
-      -  The Object.assign() method makes it easier to change multiple properties on a single object at once and is very useful when you use the mixin pattern. The Object.is() method performs strict equality on any value, effectively becoming a safer version of === when you’re working with special JavaScript values.
-      - ECMAScript 6 clearly defines enumeration order for own properties. Numeric keys always come first in ascending order followed by string keys in insertion order and symbol keys in insertion order.
-      - It’s now possible to modify an object’s prototype after it’s been created thanks to ECMAScript 6’s Object.setPrototypeOf() method.
-      - In addition, you can use the super keyword to call methods on an object’s prototype. The this binding inside a method invoked using super is set up to automatically work with the current value of this.
+ -  Objects are the center of JavaScript programming, and ECMAScript 6 makes some helpful changes to objects that make them easier to work with and more flexible. ECMAScript 6 makes several changes to object literals. Shorthand property definitions make assigning properties with the same names as in-scope variables simpler. Computed property names allow you to specify non-literal values as property names, which you’ve been able to do in other areas of the language. Shorthand methods let you type far fewer characters to define methods on object literals by completely omitting the colon and function keyword. ECMAScript 6 loosens the strict mode check for duplicate object literal property names as well, meaning two properties with the same name can be in a single object literal without throwing an error.
+ -  The Object.assign() method makes it easier to change multiple properties on a single object at once and is very useful when you use the mixin pattern. The Object.is() method performs strict equality on any value, effectively becoming a safer version of === when you’re working with special JavaScript values.
+ -  ECMAScript 6 clearly defines enumeration order for own properties. Numeric keys always come first in ascending order followed by string keys in insertion order and symbol keys in insertion order.
+ -  It’s now possible to modify an object’s prototype after it’s been created thanks to ECMAScript 6’s Object.setPrototypeOf() method.
+ -  In addition, you can use the super keyword to call methods on an object’s prototype. The this binding inside a method invoked using super is set up to automatically work with the current value of this.
 
 
 ## 6. DESTRUCTURING FOR EASIER DATA ACCESS
