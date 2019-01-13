@@ -1929,8 +1929,22 @@ For instance, you might decide to change the values of variables after they’re
     console.log(value);     // true
 
 ```
+>  (6) - ECMAScript 6 has an extended syntax that allows you to assign to a local variable with a different name, and that syntax looks like the object literal non-shorthand property initializer syntax. Here’s an example:
 
 
+```SaSS
+
+    let node = {
+        type: "Identifier",
+        name: "foo"
+    };
+
+    let { type: localType, name: localName } = node;
+
+    console.log(localType);     // "Identifier"
+    console.log(localName);     // "foo"
+
+```
 
 
 
