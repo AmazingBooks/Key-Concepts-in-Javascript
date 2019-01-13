@@ -1824,10 +1824,10 @@ The super reference is really helpful when you have multiple levels of inheritan
 
 ```
 
-ECMASCRIPT 6 is solving this problem of data fetching from different object by adding **Destructuring** for Objects and Arrays.
+ECMASCRIPT 6 is solving this problem of data fetching from different object by adding **Destructuring** for <ins>**OBJECTS**</ins> and <ins>**ARRAYS**</ins>.
 When you break down a data structure into smaller parts, getting the information you need from it becomes much easier.
 
-**Object Destructuring**
+### 6.1 Object Destructuring
 Object destructuring syntax uses an object literal on the left side of an assignment operation. For example:  
 
 ```javascript
@@ -1932,7 +1932,7 @@ For instance, you might decide to change the values of variables after they’re
 >  (6) - ECMAScript 6 has an extended syntax that allows you to assign to a local variable with a different name, and that syntax looks like the object literal non-shorthand property initializer syntax. Here’s an example:
 
 
-```SaSS
+```javascript
 
     let node = {
         type: "Identifier",
@@ -1940,18 +1940,106 @@ For instance, you might decide to change the values of variables after they’re
     };
 
     let { type: localType, name: localName } = node;
-
+    
+    //This code uses destructuring assignments to declare the localType and localName variables, 
+    //     which contain the values from the node.type and node.name properties, respectively. 
     console.log(localType);     // "Identifier"
     console.log(localName);     // "foo"
 
 ```
 
 
+>  (7) - You can add default values when you’re using a different variable name, as well. The equal sign and default value are still placed after the local variable name. For example:
+
+
+```javascript
+
+      let node = {
+          type: "Identifier"
+      };
+
+      let { type: localType, name: localName = "bar" } = node;
+
+      console.log(localType);     // "Identifier"
+      console.log(localName);     // "bar"
+
+```
+
+
+>  (8) - By using syntax similar to that of object literals, you can navigate into a nested object structure to retrieve just the information you want. Here’s an example:
+
+```javascript
+
+        let node = {
+            type: "Identifier",
+            name: "foo",
+            loc: {
+                start: {
+                    line: 1,
+                    column: 1
+                },
+                end: {
+                    line: 1,
+                    column: 4
+                }
+            }
+        };
+
+       // The destructuring pattern in this example uses curly braces to indicate that the pattern
+      //  should descend into the property named loc on node and look for the start property. 
+     //A curly brace after the colon indicates that the destination is nested another level into the object.
+        let { loc: { start }} = node;
+
+        console.log(start.line);        // 1
+        console.log(start.column);      // 1
+
+```
+
+### 6.2 Array Destructuring
+Array destructuring syntax is very similar to object destructuring: it just uses array literal syntax instead of object literal syntax. The destructuring operates on positions within an array rather than the named properties that are available in objects. For example:
+
+```javascript
+
+      let colors = [ "red", "green", "blue" ];
+
+      let [ firstColor, secondColor ] = colors;
+
+      console.log(firstColor);        // "red"
+      console.log(secondColor);       // "green"
+
+```
+>  NOTES:
+
+>  (1) You can also omit items in the destructuring pattern and only provide variable names for the items you’re interested in. If, for example, you just want the third value of an array, you don’t need to supply variable names for the first and second items. Here’s how that works:
+
+
+```javascript
+
+    let colors = [ "red", "green", "blue" ];
+
+    let [ , , thirdColor ] = colors;
+
+    console.log(thirdColor);        // "blue"
+
+```
+
+>  (2) You can use array destructuring in the context of an assignment, but unlike object destructuring, there is no need to wrap the expression in parentheses. Consider the following example.
 
 
 
+```javascript
+
+      let colors = [ "red", "green", "blue" ],
+          firstColor = "black",
+          secondColor = "purple";
+
+      [ firstColor, secondColor ] = colors;
+
+      console.log(firstColor);        // "red"
+      console.log(secondColor);       // "green"
 
 
+```
 
 
 <!--
