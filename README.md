@@ -2039,6 +2039,124 @@ Array destructuring syntax is very similar to object destructuring: it just uses
 
 
 ```
+>  (3) For Default Values - Array destructuring assignment allows you to specify a default value for any position in the array, too. The default value is used when the property at the given position either doesn’t exist or has the value undefined. For example:
+
+
+
+```javascript
+
+    let colors = [ "red" ];
+
+    let [ firstColor, secondColor = "green" ] = colors;
+
+    console.log(firstColor);        // "red"
+    console.log(secondColor);       // "green"
+
+```
+>  (4) For Nested Array Destructuring - You can destructure nested arrays in a manner similar to destructuring nested objects. By inserting another array pattern into the overall pattern, the destructuring will descend into a nested array, like this:
+
+
+```javascript
+
+    let colors = [ "red", [ "green", "lightgreen" ], "blue" ];
+
+    // later
+
+    let [ firstColor, [ secondColor ] ] = colors;
+
+    console.log(firstColor);        // "red"
+    console.log(secondColor);       // "green"
+
+```
+
+>  (5) For Rest Items - array destructuring has a similar concept called rest items. Rest items use the ... syntax to assign the remaining items in an array to a particular variable. Take a look at the following example.
+
+
+```javascript
+
+    let colors = [ "red", "green", "blue" ];
+
+    let [ firstColor, ...restColors ] = colors;
+
+    console.log(firstColor);        // "red"
+    console.log(restColors.length); // 2
+    console.log(restColors[0]);     // "green"
+    console.log(restColors[1]);     // "blue"
+
+```
+
+>  (6) Clonig arrays using rest items  - A glaring omission from JavaScript arrays is the ability to easily create a clone. In ECMAScript 5, developers frequently used the concat() method as an easy way to clone an array. For example:
+
+```javascript
+
+    // cloning an array in ECMAScript 5
+    var colors = [ "red", "green", "blue" ];
+    var clonedColors = colors.concat();
+    console.log(clonedColors);      // "[red,green,blue]"
+
+```
+
+Although the concat() method is intended to concatenate two arrays, calling it without an argument returns a clone of the array. In ECMAScript 6, you can use rest items to achieve the same task through syntax intended to function that way. It works like this:
+
+```javascript
+
+    // cloning an array in ECMAScript 6
+    let colors = [ "red", "green", "blue" ];
+    let [ ...clonedColors ] = colors;
+
+    console.log(clonedColors);      // "[red,green,blue]"
+
+```
+
+> NOTE:
+- Rest items must be the last entry in the destructured array and cannot be followed by a comma. Including a comma after rest items is a syntax error.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <!--
