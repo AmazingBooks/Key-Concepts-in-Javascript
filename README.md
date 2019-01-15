@@ -2111,21 +2111,40 @@ Although the concat() method is intended to concatenate two arrays, calling it w
 > NOTE:
 - Rest items must be the last entry in the destructured array and cannot be followed by a comma. Including a comma after rest items is a syntax error.
 
+>  (7) Mixed Destructuring - You can use object and array destructuring together to create more complex expressions. By doing so, you’re able to extract just the pieces of information you want from any mixture of objects and arrays. Consider the following example:
 
+```javascript
 
+    let node = {
+        type: "Identifier",
+        name: "foo",
+        loc: {
+            start: {
+                line: 1,
+                column: 1
+            },
+            end: {
+                line: 1,
+                column: 4
+            }
+        },
+        range: [0, 3]
+    };
 
+    let { loc: { start }, range: [ startIndex ] } = node;
 
+    console.log(start.line);      // 1
+    console.log(start.column);    // 1
+    console.log(startIndex);      // 0
 
-
-
-
-
-
-
-
-
-
-
+```
+#### SUMMARY of DESTRUCTURING 
+- Destructuring makes working with objects and arrays in JavaScript easier. Using the familiar object literal and array literal syntax, you can dissect data structures to get at the information you’re interested in.
+- Both object and array destructuring can specify default values for any property or item that is undefined, and both throw errors when the right side of an assignment evaluates to null or undefined. 
+- Destructuring declarations use var, let, or const to create variables and must always have an initializer.
+- Destructuring assignments are used in place of other assignments and allow you to destructure into object properties and already existing variables.
+- Destructured parameters use the destructuring syntax to make options objects more transparent when used as function parameters. 
+- Destructured parameters can be array patterns, object patterns, or a mixture, and you can use all the features of destructuring.
 
 
 
