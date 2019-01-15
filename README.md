@@ -9,6 +9,7 @@ Below is a resume for the most important must known features in ES6 with code ex
   4. FUNCTIONS
   5. EXPANDED OBJECT FUNCTIONALITY
   6. DESTRUCTURING FOR EASIER DATA ACCESS
+  7. SYMBOLS AND SYMBOL PROPERTIES
 
 ## 1. PROMISES and ASYNCHRONOUS PROGRAMMING
 ### What is a PROMISE? 
@@ -2147,7 +2148,53 @@ Although the concat() method is intended to concatenate two arrays, calling it w
 - Destructured parameters can be array patterns, object patterns, or a mixture, and you can use all the features of destructuring.
 
 
+## 7. SYMBOLS AND SYMBOL PROPERTIES
+ECMAScript 6 introduces **SYMBOLS** as a **primitive type** (The language already had five primitive types: Strings, Numbers, Booleans, Null, and Undefined). **SYMBOLS** began as a way to create private object members, a feature JavaScript developers wanted for a long time. 
 
+**What do I mean by Private names feature?** - private names feature is meant to let developers create non-string property names which evolved into ECMAScript 6 into **SYMBOLS**.
+
+### Creating SYMBOLS:
+**SYMBOLS** are unique among JavaScript primitives in that they don’t have a literal form, like true for Booleans or 42 for numbers. You can create a symbol using the global Symbol function, as in this example:
+
+```javascript
+
+  let fullName = Symbol();
+  let person = {};
+
+  //Here, the symbol firstName is created and used to assign a new property on the person object. 
+  person[fullName] = "John Doe";
+  console.log(person[fullName]);    // "John Doe"
+
+```
+
+#### NOTE:
+> Because symbols are primitive values, calling new Symbol() throws an error. You can create an instance of Symbol via new Object(yourSymbol) as well, but it’s unclear when this capability would be useful.
+
+The Symbol function also accepts a description of the symbol as an optional argument. You cannot use the description to access the property. For example:
+
+```javascript
+
+    let firstName = Symbol("first name");
+    let person = {};
+
+    person[firstName] = "John";
+
+    console.log("first name" in person);      // false
+    console.log(person[firstName]);           // "John"
+    console.log(firstName);                   // "Symbol(first name)"
+
+```
+A symbol’s description is stored internally in the [[Description]] property. This property is read whenever the symbol’s toString() method is called either explicitly or implicitly. The firstName symbol’s toString() method is called implicitly by console.log() in this example, so the description is printed to the log. It is not otherwise possible to access [[Description]] directly from code.
+
+
+> Because symbols are primitive values, you can use the typeof operator to determine whether a variable contains a symbol. ECMAScript 6 extends typeof to return "symbol" when used on a symbol. For example:
+
+```javascript
+
+  let symbol = Symbol("test symbol");
+  console.log(typeof symbol);         // "symbol"
+
+```
 
 
 
