@@ -2,7 +2,7 @@
 A comprehensive and easy to understand guide for Javascript advanced concepts with examples and details. 
 Information is structured and gathered from different resources, mentioned in the Reference part of the book. 
 
-Below is a resume for the most important must known features in ES6 with code examples included: 
+Here are the main Topics: 
   1. ROMISES AND ASYNCHRONOUS PROGRAMMING
   2. PROXIES AND THE REFLECTION API
   3. STRINGS AND REGULAR EXPRESSIONS
